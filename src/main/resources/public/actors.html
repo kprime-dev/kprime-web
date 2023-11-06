@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KPrime</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+
+    <script src="js/jquery.js" ></script>
+    <script src="js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/kprime.css">
+
+</head>
+<body>
+    <h1><a href="/"><img class="logo" src="img/kprime-logo-bw.png"></a> Actors</h1>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" >Home</a></li>
+            <li class="breadcrumb-item"><a href="/todos.html">Goals</a></li>
+        </ol>
+    </nav>
+    <div class="alert alert-info" role="alert">
+        <p>Actors are people and systems interacting with the domain.</p>
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addActorModal">Add a new actor</a>
+    </div>
+
+
+    <div id="app-actors">
+
+        <div v-if="errorMessage" class="alert alert-danger" role="alert">
+            <p>{{errorMessage}}</p>
+        </div>
+
+        <div v-if="successMessage" class="alert alert-success" role="alert">
+            <p>{{successMessage}}</p>
+        </div>
+
+
+        <div class="container-fluid">
+            <div class="row">
+
+            <div v-for="actor in actors" class="col-sm">
+
+<!--                <div class="card-group">-->
+                <div class="card" style="width: 18rem;">
+                    <img src="img/actor.png" class="card-img-top" alt="...">
+                    <transition name="fade">
+                    <div class="card-body card-img-overlay">
+                        <h5 class="card-title">{{ actor.name }}</h5>
+                        <h5>{{ actor.role }}</h5>
+                        <h5>{{ actor.memberOf }}</h5>
+                        <button class="btn btn-primary"  @click="editActor(actor)" data-toggle="modal" data-target="#editActorModal">Edit</button>
+                        <button class="btn btn-danger" @click="removeActor(actor)">X</button>
+                    </div>
+                    </transition>
+                </div>
+<!--                </div>-->
+
+            </div>
+            </div>
+        </div>
+
+
+    <div id="addActorModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Actor:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Name:</p>
+                    <input v-model="newActor.name">
+                    <p>Role:</p>
+                    <input v-model="newActor.role">
+                    <p>Member of:</p>
+                    <input v-model="newActor.memberOf">
+                    <p>Pass:</p>
+                    <input v-model="newActor.pass">
+                    <p>Email:</p>
+                    <input v-model="newActor.email">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" @click="addSaveActor()" class="btn btn-success">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div id="editActorModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Actor: {{editingActor.name}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Name:</p>
+                        <input v-model="editingActor.name">
+                        <p>Role:</p>
+                        <input v-model="editingActor.role">
+                        <p>Member of:</p>
+                        <input v-model="editingActor.memberOf">
+                        <p>Pass:</p>
+                        <input v-model="editingActor.pass">
+                        <p>Email:</p>
+                        <input v-model="editingActor.email">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="editSaveActor()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="actors.js"></script>
+
+</body>
+</html>

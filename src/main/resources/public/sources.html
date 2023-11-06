@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KP Sources</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+
+    <script src="js/jquery.js" ></script>
+    <script src="js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/kprime.css">
+</head>
+<body>
+    <h1><a href="/"><img class="logo" src="img/kprime-logo-bw.png"></a> Sources</h1>
+
+    <!--
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" >Home</a></li>
+            <li class="breadcrumb-item"><a href="/dictionary.html">Terms</a></li>
+        </ol>
+    </nav>
+    -->
+    <div class="alert alert-info" role="alert">
+        <p>A Source gives access to data sets. </p>
+        <table class="noborder">
+            <tr>
+                <td class="noborder">
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addSourceModal">Add a new source</a>
+                    <a href="drivers.html" class="btn btn-primary" >Drivers</a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div id="app-sources">
+
+        <div v-if="errorMessage" class="alert alert-danger" role="alert">
+            <p>{{errorMessage}}</p>
+        </div>
+
+        <div v-if="successMessage" class="alert alert-success" role="alert">
+            <p>{{successMessage}}</p>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div v-for="source in sources" class="col-sm">
+
+                    <div class="card">
+                        <img src="img/source.png" class="card-img-top" alt="...">
+                        <div class="card-body card-img-overlay">
+                            <h5 class="card-title">{{ source.name }}</h5>
+                            <p class="card-text">{{ source.type }}</p>
+                            <p class="card-text">{{ source.user }}</p>
+                            <p class="card-text">{{ source.location }}</p>
+                            <button class="btn btn-primary"  @click="editSource(source)" data-toggle="modal" data-target="#editSourceModal">Edit</button>
+                            <button class="btn btn-danger" @click="removeSource(source)">X</button>
+                            <button v-if="source.type==='h2'" @click="uploadOn(source)"  class="btn btn-primary" data-toggle="modal" data-target="#uploadSourceModal">Up Csv</button>
+                            <button v-if="source.type==='h2'" @click="uploadOn(source)"  class="btn btn-primary" data-toggle="modal" data-target="#uploadSqlModal">Up Sql</button>
+                            <button @click="showMeta(source)" class="btn btn-primary" data-toggle="modal" data-target="#showMetaModal">Meta</button>
+                            <a :class="licenseClass(source)" :href="source.licenseUrl">License {{source.license}}</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="uploadSourceModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Upload Source : {{uploadSourceName}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" v-bind:action="'/upload/'+uploadSourceName" enctype="multipart/form-data">
+                            <input type="file" name="files" multiple>
+                            <button>Submit</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="uploadSqlModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Upload Source : {{uploadSourceName}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" v-bind:action="'/uploadSql/'+uploadSourceName" enctype="multipart/form-data">
+                            <input type="file" name="files" multiple>
+                            <button>Submit</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="addSourceModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New Source : </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="type">Type:</label>
+                        <select id="type" v-model="newSource.type">
+                            <option value="h2">H2</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="psql">PostgresSQL</option>
+                            <option v-for="driver in drivers" :value="driver.type">{{driver.name}}</option>
+                        </select>
+                        <p>Name:</p>
+                        <input v-model="newSource.name">
+                        <p>Location:</p>
+                        <input v-model="newSource.location">
+                        <p>User:</p>
+                        <input v-model="newSource.user">
+                        <p>Pass:</p>
+                        <input v-model="newSource.pass">
+                        <p>License:</p>
+                        <input v-model="newSource.license">
+                        <p>License URL:</p>
+                        <input v-model="newSource.licenseUrl">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="addSaveSource()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="editSourceModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Id: {{editingSource.id}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="driverType">Type:</label>
+                        <select id="driverType" v-model="editingSource.type" @change="editingWith($event)">
+                            <option value="h2">H2</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="psql">PostgresSQL</option>
+                            <option v-for="driver in drivers" :value="driver.name" >{{driver.name}}</option>
+                        </select>
+                        <p>Driver: {{editingSource.driver}}</p>
+                        <p>Name:</p>
+                        <input v-model="editingSource.name">
+                        <p>Location:</p>
+                        <input v-model="editingSource.location">
+                        <p>User:</p>
+                        <input v-model="editingSource.user">
+                        <p>Pass:</p>
+                        <input  type="password" v-model="editingSource.pass">
+                        <p>License:</p>
+                        <input  v-model="editingSource.license">
+                        <p>License URL:</p>
+                        <input  v-model="editingSource.licenseUrl">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="editSaveSource()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="showMetaModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="width:800px;margin-left:10px;">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Meta: </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tables and constraints</p>
+                        <textarea class="transf-modal-template" v-model="meta"  cols="115" rows="10" ></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="sources.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KP Traces</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+    <script src="https://unpkg.com/marked@4.0.16"></script>
+    <script src="js/lodash.min.js"></script>
+
+
+    <!--<script src="js/jquery.js"></script>-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="js/jpopper.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="js/bootstrap.js"></script>
+    <!--<script src="js/awesomplete.js"></script>-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+    <!--<link rel="stylesheet" href="/css/awesomplete.css">-->
+
+    <!-- item template -->
+    <script type="text/x-template" id="item-template">
+        <li>
+            <div
+                    :class="{bold: isFolder}"
+                    @click="toggle">
+                {{ item.name }}
+                <span v-if="isFolder">[{{ isOpen ? '-' : '+' }}]</span>
+                <a href="#" @click="clickOnDropTrace(item.name)" >[ X ]</a>
+            </div>
+            <ul v-show="isOpen" v-if="isFolder">
+                <tree-item
+                        class="item"
+                        v-for="(child, index) in item.children"
+                        :key="index"
+                        :item="child"
+                        @make-folder="$emit('make-folder', $event)"
+                        @add-item="$emit('add-item', $event)"
+                ></tree-item>
+                <!-- <li class="add" @click="$emit('add-item', item)">+</li>-->
+            </ul>
+        </li>
+    </script>
+
+</head>
+<body>
+<div id="app-traces">
+    <h1><a href="/"><img class="logo" src="img/kprime-logo-bw.png"></a> {{currentProject}} Traces</h1>
+
+            <div class="btn-group">
+                    <button type="button" class="btn btn-primary"> <a style="color:white" href="/"><img alt="home" width="30px" src="/img/home.png"></a> </button>
+                    <button type="button" class="btn btn-primary"> <a style="color:white" target="help" href="/help/methodology.html#2"><img alt="help" width="30px" src="/img/help.png"></a> </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" v-bind:class="{ disabled: notHasTraces}" data-toggle="dropdown">
+                            Traces
+                        </button>
+                        <div class="dropdown-menu">
+                            <div  class="nobr" v-for="trace in traces">
+                            <nobr>
+                                <a class="dropdown-item" href="#" @click="clickOnTrace(trace.name)" >{{trace.name}}</a>
+                                <a href="#" @click="clickOnDropTrace(trace.name)" >[ X ]</a>
+                            </nobr>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" v-bind:class="{ disabled: notHasDatabases}" data-toggle="dropdown">
+                            TermBases
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item" v-for="traceFile in databasesXml">
+                                <a href="#" @click="clickOnTraceFile(traceFile)">{{traceFile}}</a>
+                            </div>
+                        </div>
+                    </div>
+<!--                    <div class="btn-group">-->
+<!--                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">-->
+<!--                            Transformers-->
+<!--                        </button>-->
+<!--                        <div class="dropdown-menu">-->
+<!--                            <a href="/transformers.html">editor</a>-->
+<!--                            <ul>-->
+<!--                                <li v-for="transformer in transformers">-->
+<!--                                    <div><nobr>-->
+<!--                                        {{transformer.name}} compose-->
+<!--                                            <a v-if="transformer.compose" @click="clickOnTransformer(transformer.name)" href="#">-->
+<!--                                                <img class="icon_doit" src="img/dogears.png" alt="doit">-->
+<!--                                            </a>-->
+<!--                                            <a data-toggle="modal" data-target="#whyModal"-->
+<!--                                               @click="clickOnWhy(transformer.composeWhy)" href="#"><img class="icon_why" src="img/why.png" alt="why">-->
+<!--                                            </a>-->
+<!--                                    </nobr></div>-->
+<!--                                    <div><nobr>-->
+<!--                                        {{transformer.name}} decompose-->
+<!--                                            <a v-if="transformer.decompose" @click="clickOnTransformer(transformer.name)" href="#">-->
+<!--                                                <img class="icon_doit" src="img/dogears.png" alt="doit">-->
+<!--                                            </a>-->
+<!--                                            <a data-toggle="modal" data-target="#whyModal"-->
+<!--                                               @click="clickOnWhy(transformer.decomposeWhy)" href="#"><img class="icon_why" src="img/why.png" alt="why">-->
+<!--                                            </a>-->
+<!--                                    </nobr></div>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" v-bind:class="{ disabled: notHasDocs}" data-toggle="dropdown">
+                            Stories
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item" v-for="traceFile in storyMd">
+                                <a href="#" @click="clickOnTraceFile(traceFile)">{{traceFile}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            From goal
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/todos.html">editor</a>
+                            <a v-for="goal in goals" class="dropdown-item" href="#" @click="clickOnGoal(goal.title)" > {{goal.title}} [ + ]</a>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            From source
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/sources.html">editor</a>
+                            <a v-for="source in sources" class="dropdown-item" href="#" @click="clickOnSource(source.name)" > {{source.name}} [ + ]</a>
+                        </div>
+                    </div>
+
+                </div>
+<!--
+    <tree-item
+            class="item"
+            :item="treeData"
+            @make-folder="makeFolder"
+            @add-item="addItem"
+    ></tree-item>
+    -->
+            <hr>
+            <div class="kprime-panel">
+                Source : {{currentSource}}<br>
+                Trace : {{currentTrace}}<br>
+                File: {{currentTraceFile}}<br>
+                Message: {{wsMessage}}
+            </div>
+            <hr>
+
+            <!-- content -->
+            <div class="animated slideInLeft kprime-panel">
+                <div v-if="fileeditable" class="row">
+                    <div class="col-6">
+                        <textarea v-bind:readonly="fileeditable ? false : true" v-model="traceFileContent" rows="15"></textarea>
+                        <div>
+                            <a href="#" v-if="fileeditable" @click="clickOnSaveFile()">Save</a>
+                            <a href="#" v-if="filestory" @click="clickOnPlayFile()">Play</a>
+                            <a href="/notebook">Notebook</a>
+                            <a v-bind:href="'/slide/'+currentTrace+'/'+currentTraceFile" target="story" v-if="filestory" >View</a>
+                            <a v-bind:href="'/chartactivities/'+currentTrace+'/'+currentTraceFile" target="chart-story" v-if="filestory" >Draw</a>
+                            <a v-bind:href="'/project/'+currentProject+'/doc/'+currentTrace+'/'+currentTraceFile" target="chart" v-if="filechart" >Draw</a>
+                            <a v-bind:href="'/project/'+currentProject+'/asciidoc/'+currentTrace+'/'+currentTraceFile" target="chart" v-if="filedoc" >Print</a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div  v-if="filestory" v-html="compiledMarkdown"></div>
+                    </div>
+                </div>
+
+                <div v-if="fileeditable === false" class="row">
+                    <div class="col-10">
+                        <textarea id="textresult" rows="5" >Some text</textarea>
+                        <hr>
+                        <div class="input-group row">
+                            <div class="input-group-prepend col-sm-2">
+                                <span class="input-group-text">Command</span>
+                            </div>
+                            <div class="col-sm-7">
+                                <input id="cmd" v-model="command" type="text" @keyup.enter="keyUpCommand" class="form-control">
+                            </div>
+                            <div class="input-group-prepend col-sm-3">
+                                <!--
+                                <button type="button" class="btn btn-outline-secondary" @keyup.enter="keyUpCommand">
+                                    Exec
+                                </button>
+                                -->
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                    Log
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a v-for="cmd in commandLog" class="dropdown-item" href="#" @click="clickOnCommand(cmd)">{{cmd.substring(0,10)}}</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div v-if="spinning" class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div v-if="commandFailure" class="alert alert-danger" role="alert">
+                            <label>Command Result:</label>
+                            <pre v-if="commandFailure">{{commandFailure}}</pre>
+                        </div>
+                        <div v-if="commandResult" class="alert alert-success" role="alert">
+                            <label>Command Result:</label>
+                            <pre v-if="commandResult">{{commandResult}}</pre>
+                        </div>
+                    </div><!-- col -->
+                    <div class="col-2">
+                        <a href="/transformers.html">Transformers</a>
+                        <div v-for="transformer in transformers">
+                            <div class="card " style="margin-bottom:20px;">
+                                <img src="img/todo-ok.png" class="card-img-top card-img-index" alt="...">
+                                <div class="card-body card-img-overlay">
+                                    <div><nobr>
+                                        {{transformer.name}} compose
+                                        <a v-if="transformer.compose" @click="clickOnTransformer(transformer.name)" href="#">
+                                            <img class="icon_doit" src="img/dogears.png" alt="doit">
+                                        </a>
+                                        <a data-toggle="modal" data-target="#whyModal"
+                                           @click="clickOnWhy(transformer.composeWhy)" href="#"><img class="icon_why" src="img/why.png" alt="why">
+                                        </a>
+                                    </nobr></div>
+                                    <div><nobr>
+                                        {{transformer.name}} decompose
+                                        <a v-if="transformer.decompose" @click="clickOnTransformer(transformer.name)" href="#">
+                                            <img class="icon_doit" src="img/dogears.png" alt="doit">
+                                        </a>
+                                        <a data-toggle="modal" data-target="#whyModal"
+                                           @click="clickOnWhy(transformer.decomposeWhy)" href="#"><img class="icon_why" src="img/why.png" alt="why">
+                                        </a>
+                                    </nobr></div>
+                                </div>
+                            </div>
+                        </div>
+                        ChangeSets
+                        <div v-for="traceFile in databasesCs">
+                            <a href="#" @click="clickOnTraceFile(traceFile)">
+                            <div class="card " style="margin-bottom:20px;">
+                                <img src="img/todo-ok.png" class="card-img-top card-img-index" alt="...">
+                                <div class="card-body card-img-overlay">
+                                    <h5 class="card-title">{{traceFile}}</h5>
+<!--                                    <a href="/todos.html" class="btn btn-success">Manage</a>-->
+                                </div>
+                            </div>
+                            </a>
+                            <a href="#" @click="clickOnDropTraceFile(currentTrace,traceFile)" >[ X ]</a>
+                        </div>
+
+
+                    </div><!-- col -->
+                </div> <!-- row -->
+            </div>
+
+
+
+        <div id="whyModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="width:800px;margin-left:-400px;">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Why Transformer </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="transf-modal-rules" v-model="transformerWhy"  cols="115" rows="10" ></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div> <!-- app -->
+<script src="traces.js"></script>
+<!--<script src="traces-ws.js"></script>-->
+<script>
+    document.getElementById("cmd").focus();
+</script>
+<style>
+            textarea {
+                box-sizing: border-box;
+                box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.2);
+                width: 100%;
+                border: 0;
+                min-height: 20vh;
+                outline: 0;
+                padding: 20px;
+                font-size: 18px;
+            }
+</style>
+</body>
+</html>

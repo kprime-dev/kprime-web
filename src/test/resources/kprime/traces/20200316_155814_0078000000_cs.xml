@@ -1,0 +1,88 @@
+<changeSet id="234">
+  <createTable name="film_1" id="" view="film" condition="">
+    <columns>
+      <columns name="film_id" id="id.film_id" dbname="" nullable="false" dbtype=""/>
+      <columns name="film_id" id="id.film_id" dbname="" nullable="false" dbtype=""/>
+    </columns>
+  </createTable>
+  <createTable name="film_2" id="" view="film" condition="">
+    <columns>
+      <columns name="film_id" id="id.film_id" dbname="" nullable="false" dbtype=""/>
+      <columns name="replacement_cost" id="id.replacement_cost" dbname="" nullable="false" dbtype=""/>
+    </columns>
+  </createTable>
+  <createConstraint name="film.doubleInclusion" id="" type="DOUBLE_INCLUSION">
+    <source name="" id="" table="film_1">
+      <columns>
+        <columns name="film_id" id="id.film_id" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </source>
+    <target name="" id="" table="film_2">
+      <columns>
+        <columns name="film_id" id="id.film_id" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </target>
+  </createConstraint>
+  <createConstraint name="film_2.primaryKey" id="" type="PRIMARY_KEY">
+    <source name="" id="" table="film_2">
+      <columns>
+        <columns name="film_id" id="id.film_id" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </source>
+    <target name="" id="" table="">
+      <columns>
+        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </target>
+  </createConstraint>
+  <createConstraint name="film_1.primaryKey" id="" type="PRIMARY_KEY">
+    <source name="" id="" table="film_1">
+      <columns>
+        <columns name="film_id" id="id.film_id" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </source>
+    <target name="" id="" table="">
+      <columns>
+        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </target>
+  </createConstraint>
+  <createMapping name="film_1">
+    <select>
+      <attributes>
+        <attributes name="film_id"/>
+      </attributes>
+      <from>
+        <from tableName="film" alias="" joinOn=""/>
+      </from>
+      <where condition=""/>
+    </select>
+    <union>
+      <selects/>
+    </union>
+    <minus>
+      <selects/>
+    </minus>
+  </createMapping>
+  <createMapping name="film_2">
+    <select>
+      <attributes>
+        <attributes name="film_id"/>
+        <attributes name="replacement_cost"/>
+      </attributes>
+      <from>
+        <from tableName="film" alias="" joinOn=""/>
+      </from>
+      <where condition=""/>
+    </select>
+    <union>
+      <selects/>
+    </union>
+    <minus>
+      <selects/>
+    </minus>
+  </createMapping>
+  <dropTable path="" schemaName="" tableName="film"/>
+  <dropConstraint path="" schemaName="" constraintName="film.primaryKey"/>
+  <dropConstraint path="" schemaName="" constraintName="film.functional"/>
+</changeSet>

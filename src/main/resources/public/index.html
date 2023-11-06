@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KPrime</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/jpopper.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/kprime.css">
+</head>
+<body>
+
+<div id="app-index">
+<header>
+
+        <div v-if="hasCurrentUser" class="row kprime-panel">
+            <div class="col-1 col-md">
+                <a class="navbar-brand" href="/index"><img id="logo" class="logo-banner" src="/img/kprime-logo-bw.png" alt="KPrime"></a>
+            </div>
+            <div class="col-4 col-md">
+                <img v-if="hasAvatarUrl" class="border border-primary rounded-circle avatar" v-bind:src="avatarUrl">
+                <img v-else class="border border-primary rounded-circle avatar" src="/img/user.png">
+              &nbsp; <a href="/users.html">{{currentUser}}</a>
+            </div>
+            <div class="col-4 col-md">
+                <a href="/log.html">
+                    <img class="border border-primary rounded-circle avatar" src="/img/planner.png">
+                    log
+                </a>
+            </div>
+            <div class="col-1 col-md">
+                <a href="/search.html" target="search"><img class="border border-primary rounded-circle avatar" src="/img/search.png" />
+                    search
+                </a>
+            </div>
+            <div class="col-1 col-md">
+                <a href="/help/index.html" target="help"><img class="border border-primary rounded-circle avatar" src="/img/help.png" />
+                    help
+                </a>
+            </div>
+            <div class="col-1 col-md">
+                <form method="post" action="/logout" class="form-inline">
+                    <button class="btn btn-success my-2 my-lg-0" id="logout"><img class="icon_logout" src="img/exit.jpg" alt="exit"></button>
+                </form>
+            </div>
+        </div>
+
+</header>
+
+<div class="container-fluid">
+
+
+    <div v-if="hasCurrentUser" class="kprime-panel card-contexts">
+
+        <div class="row">
+            <div class="col">
+                <h3> <img width="150px" v-bind:src="contextLogoUrl"><b> Context {{currentProject}}</b>  <a href="/admin.html" class="btn btn-success">Manage</a>
+                    <a v-if="hasCurrentProject" v-bind:href="'/project/'+currentProject+'/publish'" class="btn btn-success">Export</a>
+                </h3>
+            </div>
+            <div class="col">
+                <p>{{contextGID}}</p>
+                <p v-for="label in contextLabels">{{label}}</p>
+            </div>
+        </div>
+
+        <div v-if="hasCurrentProject" class="row">
+
+            <div class="col">
+                <div class="card " style="margin-bottom:20px;">
+                    <img src="img/todo-ok.png" class="card-img-top card-img-index" alt="...">
+                    <div class="card-body card-goals"> <!--card-img-overlay -->
+                        <h5 class="card-title">Goals</h5>
+                        <p class="card-text">to model {{currentProject}} motivations</p>
+                        <a href="/todos.html" class="btn btn-success">Manage</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card" style="margin-bottom:20px;">
+                    <img src="img/obiettivo.png" class="card-img-top card-img-index" alt="...">
+                    <div class="card-body card-stories">
+                        <h5 class="card-title">Stories  </h5>
+                        <p class="card-text">to model {{currentProject}} facts</p>
+                        <a href="/noteedit.html" accesskey="h" class="btn btn-success">Manage</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col">
+                <div class="card " style="margin-bottom:20px;">
+                    <img src="img/linked-data.png" class="card-img-top card-img-index" alt="...">
+                    <div class="card-body card-terms">
+                        <h5 class="card-title">Terms </h5>
+                        <p class="card-text">to model {{currentProject}} vocabulary</p>
+                        <a href="/dictionary.html" class="btn btn-success">Manage</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</div> <!-- container -->
+
+<footer class="pt-4 my-md-5 pt-md-12 border-top kprime-panel">
+    <div class="row">
+        <div class="col-1 col-md"></div>
+        <div class="col-4 col-md">
+            <small class="d-block mb-12 text-muted" style="white-space: nowrap;">
+                <a href="http://www.semint.it/"> Project SemInt <img width="50px" src="img/semint.png"></a>
+                - <a href="https://www.inf.unibz.it/krdb/">KRDB Group <img width="50px" src="/img/krdb.png"></a>
+                - <a href="https://www.unibz.it/">University of Bolzano <img width="50px" src="/img/unibz.jpg"></a>
+            </small>
+        </div>
+        <div class="col-1 col-md"></div>
+    </div>
+</footer>
+
+</div> <!--app-->
+
+<script src="index.js"></script>
+
+</body>
+</html>

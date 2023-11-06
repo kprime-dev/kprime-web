@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KP Timeline</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <script src="/js/jquery.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/css/kprime.css">
+
+</head>
+<body class="executive">
+<h1><a href="/"><img class="logo" src="/img/kprime-logo-bw.png"></a> Goals</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" >Home</a></li>
+        <li class="breadcrumb-item active"><a href="/todos.html" >Goals</a></li>
+    </ol>
+</nav>
+
+<div class="mermaid kprime-panel shadow">
+gantt
+{{markdownDiag}}
+</div>
+
+
+<script src="https://unpkg.com/mermaid@8.4.8/dist/mermaid.min.js"></script>
+<!--
+<script>
+</script>
+
+  <script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+-->
+<script>
+    var callback = function(){
+	alert('A callback was triggered');
+    }
+
+    var config = {
+      startOnLoad:true,
+      securityLevel:'loose',
+    };
+
+    mermaid.initialize(config);
+  </script>
+</body>
+</html>

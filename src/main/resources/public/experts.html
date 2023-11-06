@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KP Experts</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+
+    <script src="js/jquery.js" ></script>
+    <script src="js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/kprime.css">
+</head>
+<body>
+    <h1><a href="/"><img class="logo" src="img/kprime-logo-bw.png"></a> Experts</h1>
+
+    <!--
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" >Home</a></li>
+            <li class="breadcrumb-item"><a href="/dictionary.html">Terms</a></li>
+        </ol>
+    </nav>
+    -->
+    <div class="alert alert-info" role="alert">
+        <p>An Expert gives access to command extension. </p>
+        <!--
+        <table class="noborder">
+            <tr><td class="noborder">
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addSourceModal">Add a new source</a>
+            </td>
+            </tr>
+        </table>
+        -->
+    </div>
+
+    <div id="app-experts">
+
+        <div v-if="errorMessage" class="alert alert-danger" role="alert">
+            <p>{{errorMessage}}</p>
+        </div>
+
+        <div v-if="successMessage" class="alert alert-success" role="alert">
+            <p>{{successMessage}}</p>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div v-for="expert in experts" class="col-sm">
+
+                    <div class="card">
+                        <img src="/img/network.png" class="card-img-top" alt="expert">
+                        <div class="card-body card-img-overlay">
+                            <h5 class="card-title">{{expert.name}}</h5>
+                            <p class="card-text">{{expert.url}}</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="experts.js"></script>
+
+</body>
+</html>

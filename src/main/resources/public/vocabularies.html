@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KP Vocabularies</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+
+    <script src="js/jquery.js" ></script>
+    <script src="js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/kprime.css">
+</head>
+<body>
+    <h1><a href="/"><img class="logo" src="img/kprime-logo-bw.png"></a> Vocabularies</h1>
+
+    <div class="alert alert-info" role="alert">
+        <p>A Vocabularies gives access to type definitions. </p>
+        <table class="noborder">
+            <tr>
+                <td class="noborder">
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addVocabularyModal">Add a new vocabulary</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="app-vocabularies">
+
+        <div v-if="errorMessage" class="alert alert-danger" role="alert">
+            <p>{{errorMessage}}</p>
+        </div>
+
+        <div v-if="successMessage" class="alert alert-success" role="alert">
+            <p>{{successMessage}}</p>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div v-for="vocabulary in vocabularies" class="col-sm">
+
+                    <div class="card">
+                        <img src="/img/linked-data.png" class="card-img-top" alt="...">
+                        <div class="card-body card-img-overlay">
+                            <h5 class="card-title">{{ vocabulary.prefix }}</h5>
+                            <p class="card-text">{{vocabulary.namespace}}</p>
+                            <p class="card-text">{{vocabulary.reference}}</p>
+                            <p class="card-text">{{vocabulary.description}}</p>
+                            <button class="btn btn-danger" @click="removeVocabulary(vocabulary)">X</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="addVocabularyModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New Vocabulary : </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Prefix:</p>
+                        <input v-model="newVocabulary.prefix">
+                        <p>Namespace:</p>
+                        <input v-model="newVocabulary.namespace">
+                        <p>Description:</p>
+                        <input v-model="newVocabulary.description">
+                        <p>Reference:</p>
+                        <input v-model="newVocabulary.reference">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="addSaveVocabulary()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="vocabularies.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contexts</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="/js/jquery.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="/js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+
+</head>
+<body class="executive">
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="http://kprime.it/"><img height="50px" src="/img/kprime-logo-bw.png" alt="KPrime"></a></li>
+        <li class="breadcrumb-item "><a href="/"><img height="40px" src="/img/login.png" alt="Login"> Login</a></li>
+        <li class="breadcrumb-item "><a href="/search.html"><img height="50px" src="/img/search.png" alt="Search"> Search</a></li>
+        <li class="breadcrumb-item active"><img height="50px" src="/img/project_b.png" alt="Projects"> Contexts
+            <button class="btn btn-primary"><a href="/project/hierarchy" style="color:white"> Hierarchies <img src="/img/cases_w.png"  height="40px"></a></button>
+            <button class="btn btn-primary"><a href="/project/circlemap" style="color:white"> Circles <img src="/img/cases_w.png"  height="40px"></a></button>
+            <button class="btn btn-primary"><a href="/project/forcetree" style="color:white"> Tree <img src="/img/cases_w.png"  height="40px"></a></button>
+        </li>
+        <li class="breadcrumb-item active"><img height="50px" src="/img/web-search.png" alt="Projects"> World
+            <a class="btn btn-primary"  href="https://lov.linkeddata.es/dataset/lov/">LOV Cloud</a>
+            <a class="btn btn-primary"  href="https://lod-cloud.net/">LOD Cloud</a>
+            <a class="btn btn-primary"  href="https://www.wikidata.org/">WikiData</a>
+        </li>
+    </ol>
+</nav>
+<div id="content" style="margin:30px">
+    <a href="/project/?mode=grid">grid view</a>
+    <#if projects?has_content>
+    <h2>Active Contexts:</h2>
+    <table class="table-result">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <#list projects as project>
+        <tr>
+            <td>
+                <a href="/project/${project.name}">${project.name}</a>
+            </td>
+            <td>
+                ${project.description}
+            </td>
+        </tr>
+        </#list>
+    </table>
+    <h2>Inactive Contexts:</h2>
+    <table class="table-result">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <#list projectsInactive as project>
+        <tr>
+            <td>
+                <a href="/project/${project.name}">${project.name}</a>
+            </td>
+            <td>
+                ${project.description}
+            </td>
+        </tr>
+    </#list>
+    </table>
+    </#if>
+
+</div>
+
+<script src="https://unpkg.com/mermaid@8.4.8/dist/mermaid.min.js"></script>
+<!--
+<script>
+</script>
+
+  <script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+-->
+<script>
+    var callback = function(){
+	alert('A callback was triggered');
+    }
+
+    var config = {
+      startOnLoad:true,
+      flowchart:{
+        useMaxWidth:false,
+        htmlLabels:true,
+        curve:'cardinal',
+      },
+      securityLevel:'loose',
+    };
+
+    mermaid.initialize(config);
+  </script>
+</body>
+</html>

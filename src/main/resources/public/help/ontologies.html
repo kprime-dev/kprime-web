@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPrime Help: Ontologies</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link href="../css/remark.css" rel="stylesheet">
+</head>
+<body>
+<textarea id="source">
+
+# [KPrime Help](index.html)
+## Ontologies
+
+from The Complete Business Process Handbook
+
+by August-Wilhelm Scheer, Henrik von Scheel, Mark von Rosing
+
+---
+## Ontology: what is
+The term ontology can refer to a philosophical discipline that deals with the nature and the organization of reality.
+For our concern it is an intentional semantic structure that encodes the set of objects and terms that are presumed to exist in some area of interest
+ (i.e., the universe of discourse or semantic domain), the relationships that hold among them, and the implicit rules constraining the structure of this (piece of) reality.
+
+Intentional refers to a structure describing various possible states of affairs, as opposed to extensional, which would refer to a structure describing a particular state of affairs.
+
+Semantic indicates that the structure has meaning, which is defined as the relationship between (a structure of) symbols and a mental model of the intentional structure in the mind of the observer.
+
+---
+## Top Level Ontology
+Top-level or foundational ontologies are context independent because they describe very general concepts, such as space, time, and matter, which ought to be found in any context.
+
+---
+## Domain and Task Ontology
+Domain and task ontology terms are specializations of top-level ontology terms or terms used in a domain or task ontology with a wider scope (e.g., business-to-business (B2B) sales is a subcontext of sales), which means that they are directly or indirectly founded on top-level ontology terms.
+
+---
+## Application Ontology
+Application ontologies relate to a very specific context (e.g., accounting in the banking industry, B2B sales in a single sales department). Their terms can be defined as specializations of domain and task ontology terms.
+---
+## Ontology Maturity and the Maturing Process
+1. emerging
+2. folksonomy
+3. controlled vocabulary
+4. glossary
+5. theasurus
+6. class hierarchy
+7. instantiations
+8. inference
+9. frames
+10. axiomatization
+---
+## 1. Emerging
+At the lowest level of maturity, we find emerging ontologies, which are rather ad-hoc, not well-defined, individually used, and informally communicated natural-language artifacts. Within the ontology spectrum, which ranges from highly informal to formal ontologies, controlled vocabularies, glossaries, and thesauri, are suitable ontology formats for such informal ontologies.
+
+---
+## 2. Folksonomy
+Like most emerging ontologies, folksonomies use an extensional notion of conceptualization, which means that the terms are defined through examples rather than through descriptions.
+Folksonomies can mature to become formal ontologies through the organization of their terms using relationships. These relationships can be ad hoc, as in thesauri, or hierarchical, as in classification schemes.
+
+---
+## 3. Controlled Vocabulary
+A controlled vocabulary, which is a finite list of terms with a unique identifier, is the most rudimentary ontology.
+
+---
+## 4. Glossary
+A glossary is a controlled vocabulary in which each term’s meaning is given using natural language statements, is a slightly richer ontology.
+
+Both controlled vocabularies and glossaries provide a list of unrelated or implicitly related terms. Some of these emerging ontologies mature to become folksonomies or common vocabularies, which are shared within and collaboratively improved by a community.
+---
+## 5. Thesaurus
+A thesaurus increases ontology expressiveness by adding relations (e.g., synonyms) between terms in a controlled vocabulary. However, thesauri do not necessarily provide an explicit term hierarchy (e.g., specialization-generalization), which is a feature of classification schemes.
+
+---
+## 6. Class Hierarchy
+A CLASSIFICATION SCHEME contains informatory “is-a” relations,
+
+a CLASS HIERARCHY strict specialization–generalization relation. Strict specialization–generalization relations create a treelike hierarchy, with a generic term as the root and more specific terms, which inherit meaning from the more generic concepts (e.g., the root) they are related to, as branches and leafs.
+---
+## 7. Istantiations
+The formality level of a class hierarchy can be increased by adding instantiation as a relation. Instantiation distinguishes between a meaningful term, which is often called a class (e.g., a car), and the terms that are examples of this class, which are often called instances (e.g., my car, your car).
+
+---
+## 8. Inference
+Inference rules can be derived from classification schemes and class hierarchies.
+For example, if a car is a kind of vehicle, then my car is also a vehicle. This implies that everything that can be said about vehicles can be said about my car.
+
+---
+## 9. Frames
+At a higher level of thesaurus expressiveness, frames include information about potential properties and relationships of classes and their instances (e.g., a car might have a price).
+
+---
+## 10. Axiomatization
+The final phase in the maturing process is called the axiomatization. An axiom is a statement for which there is no counter-example or exception. Value restrictions, which increase the expressiveness of a frame by discriminating valid from invalid relationships between properties of classes and their instances, are examples of axioms. Other examples of axioms include mathematical equations that relate properties, or logical restrictions on classes and their instances (e.g., disjointness constraint).
+
+Some ontologies also provide heuristic value restrictions (e.g., most cars consume fuel, most cars have one owner).
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

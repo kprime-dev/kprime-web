@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Context</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="/js/jquery.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="/js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+
+</head>
+<body class="executive">
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">KPrime</li>
+        <li class="breadcrumb-item active"><a href="/project/">Context</a></li>
+        <li class="breadcrumb-item active">${project.name}</li>
+    </ol>
+</nav>
+
+<div id="content" class="shadow kprime-panel shadow" style="">
+    <#if projectHasPic>
+        <img src="${project.picUrl}" style="max-width: 500px; max-height:500px">
+    <#else>
+        <img src="/img/project.png">
+    </#if>
+    <h2>Context Name: ${project.name}</h2>
+    <h5>Context Global ID: ${project.gid}</h5>
+    <p>${project.description}</p>
+    <h2>Labels:</h2>
+    <#list rdfLabels as rdfLabel >
+    <p>${rdfLabel}</p>
+    </#list>
+
+    <div id="buttons">
+        <a class="btn btn-primary"  href="/project/${project.name}/cases">Goals</a>
+        <a class="btn btn-primary"  href="/project/${project.name}/hierarchy">Hierarchy</a>
+
+        <#if hasDictionaryUrl>
+            <a class="btn btn-primary" href="${dictionaryUrl}">Dictionary</a>
+        <#else>
+            <a class="btn btn-outline-secondary btn-sm" href="#">Dictionary</a>
+        </#if>
+        <a class="btn btn-outline-secondary btn-sm" href="#">VUCA</a>
+        <a class="btn btn-outline-secondary btn-sm" href="#">Gantt</a>
+        <#if project.licenseUrl?has_content>
+            <a class="btn btn-primary" href="${project.licenseUrl}">License ${project.license}</a>
+        <#else>
+            <a class="btn btn-outline-secondary btn-sm" href="#">License ${project.license}</a>
+        </#if>
+    </div>
+
+    </hr>
+    <h2>Stories:</h2>
+
+
+    </hr>
+    <h2>Actors:</h2>
+    <div class="container-fluid">
+        <div class="row">
+        <#list users as user >
+            <div class="card" style="width: 18rem;">
+                <img src="/img/user.png" class="card-img-top" alt="actor">
+                <div class="card-body card-img-overlay">
+                    <h5 class="card-title">${ user.name }</h5>
+                    <h5>${ user.role }</h5>
+                    <h5>${ user.memberOf }</h5>
+                </div>
+            </div>
+        </#list>
+        </div>
+    </div>
+
+    </hr>
+    <h2>Users:</h2>
+
+</div>
+
+<script src="https://unpkg.com/mermaid@8.4.8/dist/mermaid.min.js"></script>
+<!--
+<script>
+</script>
+
+  <script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+-->
+<script>
+    var callback = function(){
+	alert('A callback was triggered');
+    }
+
+    var config = {
+      startOnLoad:true,
+      flowchart:{
+        useMaxWidth:false,
+        htmlLabels:true,
+        curve:'cardinal',
+      },
+      securityLevel:'loose',
+    };
+
+    mermaid.initialize(config);
+  </script>
+</body>
+</html>

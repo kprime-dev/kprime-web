@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KP Slides: {{traceFileName}}</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <style type="text/css">
+    html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Jura', sans-serif;
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding: 0 0 40px;
+    color: #333;
+    background: #d9d9d9;
+    background: #FDE3A7; /*CAPE HONEY*/
+
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Alegreya Sans SC', sans-serif;
+    font-weight: 300;
+    color: #444;
+}
+
+h1 {
+   color: #a00;
+}
+h2 {
+   color: #00e;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+    </style>
+</head>
+<body>
+    <textarea id="source">
+
+# KPrime Slides
+## {{traceFileName}}
+trace: {{traceName}}
+{{menu}}
+
+---
+
+{{markdownStory}}
+
+---
+![morning](/img/kprime-logo-bw.png)
+
+
+    </textarea>
+
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        //     {left: "$$", right: "$$", display: true},
+        //     {left: "$", right: "$", display: false},
+        //     {left: "\\[", right: "\\]", display: true},
+        //     {left: "\\(", right: "\\)", display: false},
+        // ]});
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

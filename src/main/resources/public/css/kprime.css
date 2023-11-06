@@ -1,0 +1,198 @@
+body {
+    font-family: 'Jura', sans-serif;
+    color: #444;
+    background-color: #eee;
+    background-image: url('/img/bg-scratches.jpg');
+}
+
+h1 {
+    font-family: 'Alegreya Sans SC', sans-serif;
+    font-weight: 300;
+}
+
+hr {
+    border-top: 1px solid rgba(156, 16, 219, 0.58)
+}
+
+a {
+    text-decoration: underline dotted red;
+}
+
+.executive {
+    background-image: url('/img/arabesque7y.jpeg');
+}
+
+.bg-term {
+    background-image: url('/img/arabesque7y_purple.jpeg');
+}
+
+.bg-goal {
+    background-image: url('/img/arabesque7y_yellow.jpeg');
+}
+
+.bg-story {
+    background-image: url('/img/arabesque7y_green.jpeg');
+}
+
+.kprime-panel {
+    margin:20px;
+    padding:10px;
+    background-color:#FFFFFF80;
+    border-radius: 25px;
+}
+
+.kprime-white-panel {
+    margin:20px;
+    padding:10px;
+    background-color:#FFFFFF;
+    border-radius: 25px;
+}
+
+.modal-lg {
+    max-width:100%;
+}
+
+.modal-dialog {
+    max-width:100%;
+    width:50%
+}
+
+.dictionary-term-panel {
+    margin:30px;
+    padding:30px;
+    background-color:#FFFFedFF;
+    box-shadow: 10px 10px 5px purple;
+}
+
+.todo-panel {
+    margin:30px;
+    padding:30px;
+    background-color:#FFFFedFF;
+    box-shadow: 10px 10px 5px green;
+}
+
+.logo {
+    width: 150px;
+}
+
+.logo-banner {
+    width: 150px;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.table-result {
+    background-color: #fff;
+}
+
+.card {
+    width: 20rem;
+    margin-top:_20px;
+    margin-bottom:20px;
+    box-shadow: 10px 10px 5px grey;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.card-disabled {
+    background-color: lightgray;
+}
+
+.card-selected {
+    background-color: #cfc;
+}
+
+.card-img-top {
+    width: 15rem;
+    align-self: flex-end;
+    margin-top: 20px;
+    opacity: 0.4;
+}
+
+.card-img-index {
+    width: 8rem;
+}
+
+.card-contexts {
+   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5), 0 25px 50px 0 rgba(200, 0, 0, 0.8);
+}
+
+.card-goals {
+   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5), 0 25px 50px 0 rgba(200, 150, 0, 0.8)
+}
+
+.card-terms {
+   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5), 0 25px 50px 0 rgba(118, 29, 202, 0.8)
+}
+
+.card-stories {
+   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5), 0 25px 50px 0 rgba(6, 136, 6, 0.8);
+}
+
+
+.textspace {
+    width: 100%;
+    heigth: 50%;
+    font-size: 25px;
+}
+
+.sources-col, .traces-col, .changes-col {
+    width: 150px;
+}
+
+.transf-modal {
+    width:800px;
+    margin-left:-400px;
+}
+
+.transf-modal-rules {
+    font-size: 10px;
+}
+
+.transf-modal-template {
+    font-size: 10px;
+}
+
+.icon_why {
+    width: 20px;
+}
+
+.icon_doit {
+    width: 20px;
+}
+
+.icon_edit {
+    width: 20px;
+}
+
+.icon_logout {
+    height: 40px;
+}
+.completed {
+    color: green;
+    text-decoration: line-through;
+}
+
+.todo {
+    background-color: yellow;
+    padding: 20px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.noborder{ border:0; }
+
+.nobr { white-space: nowrap }
+
+.avatar {
+    width: 65px;
+}

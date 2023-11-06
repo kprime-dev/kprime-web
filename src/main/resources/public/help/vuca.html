@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPrime Help: VUCA</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link href="../css/remark.css" rel="stylesheet">
+</head>
+<body>
+<textarea id="source">
+
+# [KPrime Help](index.html)
+## VUCA Metrics
+measuring basic model parameters
+---
+
+# VUCA Model Problems
+
+* Volatility, a situation that is unstable and may be of unknown duration.<br>
+    A lot of changes in short time.
+
+* Uncertainty, a situation with lack of information.<br>
+    A lot to questions to ask.
+
+* Ambiguity, a unclear situation with very very limited formal definition.<br>
+    A lot of definitions do add, following the level fo a maturity grade.
+
+* Complexity, a situation with lots of components.<br>
+    A lot of elements to cut or aggregate.
+
+---
+## VUCA Dimensions
+
+volatility VS stability (VS)
+
+uncertainity VS certainity (UC)
+
+complexity VS simplicity (CS)
+
+ambiguity VS formality (AF)
+
+rarity VS popularity (RP) folk
+
+---
+## Naive measures and ordering for VUCA
+
+### mVS
+
+changes counter over a changeset
+
+-1 for each element in changeset
+
+range Int- , <=0
+
+higher = more stable
+
+---
+### mUC
+
+dictionary definition counter
+
+alternative feedback counter
+
+open todo counter
+
++5 for each dictionary definition
+
+-1 for each todo
+
+-1 for each alternative feedback
+
+range Int
+
+higher = more certain
+
+---
+### mCS
+element counter per database
+
+-1 for each table<br>
+-1 for each column<br>
+-1 for each constraint
+
+range Int- , <=0
+
+higher = easier
+
+---
+### mAF
+quality element counter per database
+
++1 for each definition dictionary <br>
++2 for each table  <br>
++5 for each is-a constraint <br>
+
+range Natural, Int+, >=0
+
+higher = more mature
+
+---
+## Naive Metrics for VUCA
+
+* abs delta mVS
+* abs delta mVS
+* abs delta mCS
+* abs delta mAF
+
+they satisfy:
+
+1. range R0+
+2. simmetry d(a,b)=d(b,a)
+3. triangular inequality d(a,b)>=d(a,c)+d(c,b)
+4. zero distance from identity d(a,a)=0
+
+
+---
+![morning](https://www.viralinformer.com/file/2018/12/70-people-reveal-how-to-say-hello-and-goodbye.jpg)
+
+
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        //     {left: "$$", right: "$$", display: true},
+        //     {left: "$", right: "$", display: false},
+        //     {left: "\\[", right: "\\]", display: true},
+        //     {left: "\\(", right: "\\)", display: false},
+        // ]});
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

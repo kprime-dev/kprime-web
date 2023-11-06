@@ -1,0 +1,39 @@
+# Context Mindmap
+
+---
+-- author : Nicola Pedot
+
+---
+```chart
+mindmap
+  root((mindmap))
+    Measure
+    ::icon(fa fa-cube)
+      Volatility
+      Uncertainty
+      Complexity
+      Ambiguity
+    Goal
+    ::icon(fa fa-bullseye)
+      SMART
+      Priority
+      Actor
+        British popular psychology author Tony Buzan
+    Story
+    ::icon(fa fa-book)
+      On effectivness<br/>and features
+      CSV
+      Notebook
+      Chart
+    Term
+    ::icon(fa fa-commenting)
+      Vocabulary
+      Source
+    Users
+    ::icon(fa fa-user)
+        Admin
+        Authors
+        Readers
+```
+
+---

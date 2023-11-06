@@ -1,0 +1,27 @@
+# Author Journey
+
+---
+```chart
+journey
+    title Author Journey
+    section Login
+      Insert Credentials: 5: Me
+      Use SSO Credentials: 3: Me
+    section Goals
+      Write one goal: 5: Me
+      Edit goal details: 5: Me
+      Click to edit goal story: 1: Me,Author
+    section Story
+      Give a name to the story: 1: Me,Author
+      Write story content story: 1: Me,Author
+      Add story terms: 1: Me,Author
+    section Terms
+      Click on Dictionary: 1: Me,Author
+      Share Dictionary page link: 1: Me,Author
+    section Logout
+      Go to home page and click on logout: 5: Me
+      Leave page and let session timeout logout: 3: Me
+
+```
+
+---

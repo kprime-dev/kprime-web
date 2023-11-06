@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KP Notebook</title>
+    <meta charset="UTF-8">
+
+    <link rel="icon" href="/img/favicon.png">
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script src="js/lodash.min.js"></script>
+
+    <script src="https://unpkg.com/marked@4.0.16"></script>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/jpopper.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="fontawesome/css/all.css">
+<!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">-->
+<!--    <script src="https://unpkg.com/feather-icons"></script>-->
+    <link href="https://fonts.googleapis.com/css?family=Cutive+Mono|Gentium+Book+Basic:ital@1|Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css"  href="/css/kprime.css" />
+    <link rel="stylesheet" type="text/css" href="noteview.css" />
+
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="bg-story">
+  <div  id="app-notes">
+
+  <h1><a href="/"><img class="logo" src="/img/kprime-logo-bw.png"></a> {{currentProject}} Stories</h1>
+
+    <!--
+    {{notes[0]}}
+    <h2>COMMAND: {{command}}</h2>
+    <h2>HASH: {{hash}}</h2>
+    <h2>tr: {{currentTrace}}</h2>
+    <h2>tf: {{currentTraceFile}}</h2>
+    -->
+
+    <section class="noteapp">
+      <section class="main" v-show="notes.length" v-cloak>
+        <ul class="note-list">
+          <li
+            v-for="(note, index) in notes"
+            class="note"
+            :id="note.id"
+            :key="note.id"
+          >
+            <div class="view">
+              <label v-html="note.marked"></label>
+            </div>
+     
+          </li>
+     
+        </ul>
+        
+      </section>
+    </section>
+  </div>
+    <script src="noteview.js  "></script>
+  </body>
+</html>
+

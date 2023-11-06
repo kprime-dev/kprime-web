@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KP Goals</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+    <script src="js/lodash.min.js"></script>
+
+    <script src="js/jquery.js" ></script>
+    <script src="js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="js/bootstrap.js"></script>
+
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+</head>
+<body>
+
+    <audio id="clickAudio">
+        <source src="/audio/rclick.mpeg" type="audio/mpeg">
+    </audio>
+    <audio id="triggerAudio">
+        <source src="/audio/trigger.ogg" type="audio/ogg">
+        <source src="/audio/trigger.mpeg" type="audio/mpeg">
+    </audio>
+
+    <div id="app-todos">
+
+        <div style="width:100%;"  class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" style="width:100%;">
+                <button type="button" class="btn btn-secondary"> <a style="color:white" href="/"><img class="logo" height="30px" src="img/kprime-logo-bw.png"></a></button>
+                <button type="button" class="btn btn-secondary"> <a style="color:white" href="/admin.html"><img alt="context" width="30px" src="/img/context-icon.png"></a> </button>
+                <button type="button" class="btn btn-secondary disabled"> <img width="30px" src="/img/todo-ok.png"></button>
+                <button type="button" class="btn btn-secondary"> <a style="color:white" href="/noteedit.html"><img alt="home" width="30px" src="/img/obiettivo.png"></a> </button>
+                <button type="button" class="btn btn-secondary"> <a style="color:white" href="/dictionary.html"><img alt="home" width="30px" src="/img/linked-data.png"></a> </button>
+                <button type="button" class="btn btn-secondary"> <a style="color:white" target="help" href="/help/methodology.html#1"><img alt="help" width="30px" src="/img/help.png"></a> </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" v-bind:class="{ disabled: notHasProjects}" data-toggle="dropdown">
+                        Contexts
+                    </button>
+                    <div class="dropdown-menu">
+                        <a v-for="project in projects" class="dropdown-item" href="#" @click="clickOnProject(project)" >{{project.name}}</a>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <!--                <button type="button" class="btn btn-secondary" >-->
+                    <!--                    <a href="/actors.html" style="color:white">Actors</a>-->
+                    <!--                </button>-->
+                    <button v-if="hasCurrentTrace" type="button" class="btn btn-secondary">
+                        <a v-bind:href="'/barchart/'+currentTrace"><img alt="" width="30px" src="/img/changes_w.png"></a>
+                    </button>
+                    <!--                <button type="button" class="btn btn-secondary">-->
+                    <!--                    <a target="_blank" href="/gantt"><img alt="" width="30px" src="/img/gantt_w.png"></a>-->
+                    <!--                </button>-->
+                    <button type="button" class="btn btn-secondary">
+                        <a target="_blank" @click="clickOnMarkdown()"><img alt="markdown" width="30px" src="/img/markdown-icon.png"></a>
+                    </button>
+                    <button type="button" class="btn btn-secondary">
+                        <a target="_blank" v-bind:href="'/project/'+currentProject+'/cases'"><img alt="diagram" width="30px" src="/img/cases_w.png"></a>
+                    </button>
+                </div>
+                <div class="btn btn-secondary" style="width:100%;"></div>
+            </div>
+        </div>
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                {{currentProject}} goals
+            </li>
+        </ol>
+
+        <div class="nobr kprime-panel">
+            <div>
+                <label> Add goal: </label><input v-focus v-model="newTodo"
+                                                 @keydown.alt.t.prevent="gotoTerms"
+                                                 @keydown.alt.s.prevent="gotoStories"
+                                                 @keydown.alt.c.prevent="gotoContexts"
+                                                 @keyup.enter="addTodo">
+            </div>
+        </div>
+
+        <hr>
+        <div v-if="messageFailure" class="alert alert-danger" role="alert">
+            <label>Failure:</label>
+            <pre>{{messageFailure}}</pre>
+        </div>
+        <div v-if="messageSuccess" class="alert alert-success" role="alert">
+            <label>Success:</label>
+            <pre>{{messageSuccess}}</pre>
+        </div>
+
+
+        <div class="kprime-panel animated" v-bind:class="{ slideInLeft: hasTodos, slideOutLeft: notHasTodos }">
+            <span class="badge bg-primary"><a  style="color:white;" href="#" @click="filterWithLabel('ALL')" >ALL</a></span>
+            <span class="badge bg-primary"><a  style="color:white;" href="#" @click="filterWithLabel('')" >NONE</a></span>
+            <span v-for="label in labelFilters"  class="badge bg-primary"><a style="color:white;" href="#"  @click="filterWithLabel(label)">{{label}}</a></span>
+
+            <div>
+                <table class="table-result card-goals">
+                    <tr>
+                        <th>parent</th>
+                        <th>goal</th>
+                        <th>priority</th>
+                        <th>estimate</th>
+                        <th>assignee</th>
+    <!--                    <th>due date</th>-->
+                        <th>actions</th>
+                    </tr>
+                    <tr v-for="todo in filteredTodos">
+                        <td><a href="#" @click="clickOnFilterParent(todo)">{{parentName(todo.partof)}}</a></td>
+                        <td  class="todo" v-bind:class="{ completed: todo.completed }">
+                            <b>{{todo.title}}</b><br>
+    <!--                        <span style="font-variant-position: sub;">{{ todo.id}} - created on {{ todo.dateCreated | dateFormat('YYYY.MM.DD HH:mm') }}</span><br>-->
+                            <span style="font-variant-position: sub;">{{todo.key}} | {{todo.labels}}</span>
+                        </td>
+                        <td>{{todo.priority}}</td>
+                        <td>{{todo.estimate}}</td>
+                        <td>{{todo.assignee}}</td>
+    <!--                    <td>{{todo.dateDue | dateFormat('YYYY.MM.DD') }}</td>-->
+                        <td>
+                            <button class="btn btn-primary btn-sm" alt="Edit" title="Edit" @click="editTodo(todo)" data-toggle="modal" data-target="#editModal"><img class="icon_edit" src="img/editw.png"></button>
+                            <a class="btn btn-primary"  target="_blank" v-bind:href="'/project/'+currentProject+'/todo/'+todo.gid" >Page</a>
+    <!--                        <button class="btn btn-primary btn-sm" alt="Start"  title="Start" @click="startTodo(todo)">&#9654;</button>-->
+    <!--                        <button class="btn btn-primary btn-sm" alt="Pause"  title="Pause" @click="startTodo(todo)">&#10074;&#10074;</button>-->
+    <!--                        <button disabled class="btn btn-secondary btn-sm" alt="Failure" title="Success" @click="completeTodo(todo)">&#10004;</button>-->
+    <!--                        <button disabled class="btn btn-secondary btn-sm" alt="Success" title="Failure" @click="completeTodo(todo)">&#9473;</button>-->
+                            <button class="btn btn-danger"  alt="Remove" title="Remove" @click="removeTodo(todo)">X</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div><!--animated-->
+
+    <div style="margin:30px">
+
+
+        <div class="alert alert-info animated" v-bind:class="{ fadeOut: hasTodos, fadeIn: notHasTodos }" role="alert">
+            <p>Goals are team targets. Top priority goal is the team north star.</p>
+        </div>
+
+            <hr>
+            <div class="nobr alert alert-info">
+                <div>
+                    Volatility: {{vuca.volatility}} Uncertainty: {{vuca.uncertainty}} Complexity: {{vuca.complexity}} Ambiguity: {{vuca.ambiguity}}
+                </div>
+                <div>
+                    <label> Total estimate: {{totalFilteredEstimate}} / {{totalEstimate}} </label> <label> Goals Nr: {{filteredTodos.length}} / {{todos.length}}</label>
+                </div>
+            </div>
+
+
+
+        <div id="editModal" class="modal  modal-lg" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Todo: {{editingTodo.id}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr><td>Title:</td><td><input v-model="editingTodo.title"></td></tr>
+                            <tr><td>Priority:</td><td><input v-model="editingTodo.priority"></td></tr>
+                            <tr><td>Estimate:</td><td><input v-model="editingTodo.estimate"></td></tr>
+                            <tr><td>Assignee:</td><td><input v-model="editingTodo.assignee"></td></tr>
+<!--                            <tr><td>Due date:</td><td><input v-model="editingTodo.dateDue"></td></tr>-->
+                            <tr><td>Part of:</td><td>
+                                <select id="type" v-model="editingTodo.partof">
+                                    <option value="">No one</option>
+                                    <option v-for="todo in todos" v-bind:value="todo.id">{{todo.title}}</option>
+                                </select>
+                            </tr>
+                            <tr><td>Labels:</td><td><input v-model="editingTodo.labels"></td></tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <a v-bind:href="'/context/'+currentProject+'/storygoaledit/'+editingTodo.id+'/'+encodeURI(editingTodo.title)" class="btn btn-success" alt="Write"  ><img class="icon_edit" src="img/editw.png">Edit Story</a>
+                        <button type="button" @click="editSaveTodo()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script  type="module" src="todos.js"></script>
+
+</body>
+</html>

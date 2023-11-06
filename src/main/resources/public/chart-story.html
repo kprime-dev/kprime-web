@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chart Story</title>
+        <link href="/img/favicon.png" rel="icon">
+        <meta charset="utf-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+
+        <script src="/js/jquery.js"></script>
+        <link href="/css/bootstrap.css" rel="stylesheet">
+        <script src="/js/bootstrap.js"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="/css/animate.css" >
+        <link rel="stylesheet" type="text/css" href="/css/kprime.css" >
+        <link rel="stylesheet" type="text/css" href="fontawesome/css/all.css">
+    </head>
+    <body class="bg-story">
+        <h1><a href="/"><img class="logo" src="/img/kprime-logo-bw.png"></a> Story</h1>
+        <div class="mermaid animated bounceInRight kprime-white-panel shadow">
+            {{markdownDiag}}
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+        <script>
+
+            var config = {
+              startOnLoad:true,
+              sequence: {
+                showSequenceNumbers: true
+              },
+              flowchart: {
+                useMaxWidth:false,
+                htmlLabels:true,
+                curve:'cardinal',
+              },
+              securityLevel:'loose', 'theme': 'base'
+            };
+
+            mermaid.initialize(config);
+        </script>
+    </body>
+</html>

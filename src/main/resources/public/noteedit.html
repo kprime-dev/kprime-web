@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KP Notebook</title>
+    <meta charset="UTF-8">
+
+    <link rel="icon" href="/img/favicon.png">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script src="js/lodash.min.js"></script>
+    <script src="https://unpkg.com/marked@4.0.16"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/jpopper.js"></script>
+    <script src="js/bootstrap.js"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cutive+Mono|Gentium+Book+Basic:ital@1|Alegreya+Sans+SC|Jura:500&display=swap">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="fontawesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="/css/kprime.css" />
+    <link rel="stylesheet" type="text/css" href="note.css" />
+
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+
+    <audio id="clickAudio">
+      <source src="/audio/rclick.mpeg" type="audio/mpeg">
+    </audio>
+    <audio id="triggerAudio">
+      <source src="/audio/trigger.ogg" type="audio/ogg">
+      <source src="/audio/trigger.mpeg" type="audio/mpeg">
+    </audio>
+
+    <div  id="app-notes">
+
+    <div style="width:100%;"  class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+      <div class="btn-group" style="width:100%;">
+        <button type="button" class="btn btn-secondary"> <a style="color:white" href="/"><img class="logo" height="30px" src="img/kprime-logo-bw.png"></a></button>
+        <button type="button" class="btn btn-secondary"> <a style="color:white" href="/admin.html"><img alt="contexts" width="30px" src="/img/context-icon.png"></a> </button>
+        <button type="button" class="btn btn-secondary"> <a style="color:white" href="/todos.html"><img alt="goals" width="30px" src="/img/todo-ok.png"></a> </button>
+        <button type="button" class="btn btn-secondary disabled"> <img alt="stories" width="30px" src="/img/obiettivo.png"> </button>
+        <button type="button" class="btn btn-secondary"> <a style="color:white" href="/dictionary.html"><img alt="terms" width="30px" src="/img/linked-data.png"></a> </button>
+        <button type="button" class="btn btn-secondary"> <a style="color:white" target="help" href="/help/methodology.html#2"><img alt="help" width="30px" src="/img/help.png"></a> </button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary dropdown-toggle" v-bind:class="{ disabled: notHasProjects}" data-toggle="dropdown">
+            Contexts
+          </button>
+          <div class="dropdown-menu">
+            <a v-for="project in projects" class="dropdown-item" href="#" @click="clickOnProject(project)" >{{project.name}}</a>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button v-bind:class="{ disabled: notHasTraces}" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+            Folders
+          </button>
+          <div class="dropdown-menu">
+            <a v-if="hasBackTrace" class="dropdown-item" href="#" @click="clickOnBackTrace()" >..</a>
+                <div class="dropdown-item"  v-for="traceName in traces">
+                  <a href="#" @click="clickOnDropTrace(traceName)" ><img width="10px" src="/img/x.jpg"></a>
+                  <a href="#" @click="clickOnTrace(traceName)" >{{traceName}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button v-bind:class="{ disabled: notHasDocs}"  type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+            Stories
+          </button>
+          <div class="dropdown-menu">
+            <div class="dropdown-item" v-for="traceFile in storyMd">
+              <a href="#" @click="clickOnDropTraceFile(currentTrace,traceFile)" ><img width="10px" src="/img/x.jpg"></a>
+              <a href="#" @click="clickOnTraceFile(traceFile)">{{traceFile}}</a><nbsp/>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group">
+          <!-- v-bind:class="{ disabled: notHasDocs}" -->
+          <button v-bind:class="{ disabled: notHasTraces}" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+            From Template
+          </button>
+          <div class="dropdown-menu">
+            <div class="dropdown-item" v-for="templateName in templateNames">
+              <a href="#" @click="clickOnTemplate(templateName)">{{templateName}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button v-if="filestory" type="button" class="btn btn-secondary" >
+    <!--        <a href="#" @click="clickOnPlayFile()" style="color:white" >Play</a>-->
+            <a v-bind:href="'/context/'+this.currentProject+'/traceplay/'+this.traceDirForUrl+'/'+this.currentTraceFile" target="play"  style="color:white">Play</a>
+          </button>
+          <button v-if="filestory" type="button" class="btn btn-secondary" >
+            <a v-bind:href="'/context/'+currentProject+'/slide/'+traceDirForUrl+'/'+currentTraceFile" target="story" style="color:white" >Slide</a>
+          </button>
+          <button v-if="filestory" type="button" class="btn btn-secondary">
+            <a v-bind:href="'/context/'+currentProject+'/chartactivities/'+traceDirForUrl+'/'+currentTraceFile" target="chart-story"  style="color:white" >Storyline</a>
+          </button>
+          <button v-if="filechart" type="button" class="btn btn-secondary">
+            <a v-bind:href="'/project/'+currentProject+'/doc/'+traceDirForUrl+'/'+currentTraceFile" target="chart"  style="color:white" >Draw</a>
+          </button>
+          <button v-if="filedoc" type="button" class="btn btn-secondary">
+            <a v-bind:href="'/project/'+currentProject+'/asciidoc/'+traceDirForUrl+'/'+currentTraceFile" target="chart"  style="color:white" >Print</a>
+          </button>
+          <button type="button" class="btn btn-secondary">
+            <a v-bind:href="'/noteview.html?pr='+currentProject+'&amp;tr='+traceDirForUrl+'&amp;tf='+currentTraceFile" target="view"  style="color:white" >View</a>
+          </button>
+        </div>
+        <div class="btn btn-secondary" style="width:100%;"></div>
+      </div>
+    </div>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        {{currentProject}} {{traceDirLabel}} stories
+      </li>
+    </ol>
+
+    <div v-if="messageFailure" class="alert alert-danger" role="alert">
+      <label>Failure:</label>
+      <pre>{{messageFailure}}</pre>
+    </div>
+
+    <div class="kprime-panel animated slideInLeft">
+      <section class="notegoals">
+        <h3>Goals:</h3>
+        <ol>
+          <li v-for="(reference, index) in notegoals">
+            <a target="goal-page" :href="reference.url">{{reference.label}}</a> <label @click="removeGoal(index)">x</label>
+          </li>
+        </ol>
+            <input id="goal" v-model="goal" type="text" class="form-control"
+                   @keyup.ctrl.space="autocompGoal"
+                   @keyup.enter="addGoal"
+                   @keydown.alt.t.prevent="gotoTerms"
+                   @keydown.alt.g.prevent="gotoGoals"
+                   @keydown.alt.c.prevent="gotoContexts"
+                   >
+      </section>
+
+        <section class="noteapp">
+              <span>
+                <input type="text" v-focus  v-model="currentTraceFile"
+                       @keydown.alt.t.prevent="gotoTerms"
+                       @keydown.alt.g.prevent="gotoGoals"
+                       @keydown.alt.c.prevent="gotoContexts"
+                       @focus="onCurrentTraceFileFocus($event)"
+                       @blur="onCurrentTraceFileBlur($event)"/>
+                <a href="#" @click="clickOnClearStory()">clear</a>
+                <a href="#" @click="clickOnNewStory()">new</a>
+              </span>
+          <section class="main" v-show="notes.length" v-cloak>
+            <ul class="note-list">
+              <li
+                v-for="(note, index) in filteredTodos"
+                class="note"
+                :id="note.id"
+                :key="note.id"
+                :class="{ code: noteCode(note), selected: note.selected, editing: note == editedTodo, coded: note.coded}"
+              >
+                <div class="view">
+                  <button  v-model="note.coded" v-if="noteCode(note)" class="play" @click="runCode(note)"><i class="fas fa-play-circle"></i></button>
+                  <label @dblclick="editTodo(note, $event)" v-html="note.marked"></label>
+                  <button class="add" @click="addCell(index)"><i class="fas fa-plus"></i></button>
+                  <button v-if="index !== notes.length -1" class="merge" @click="mergeCells(note, index)"><i class="fas fa-compress-alt"></i></button>
+                  <button class="up" @click="upTodo(note)"><i class="fas fa-arrow-up"></i></button>
+                  <button class="down" @click="downTodo(note)"><i class="fas fa-arrow-down"></i></button>
+                  <button class="destroy" @click="removeTodo(note)"><i class="fas fa-times"></i></button>
+                </div>
+                <textarea
+                class="edit"
+                type="text"
+                v-model="note.title"
+                v-note-focus="note == editedTodo"
+                @keyup.ctrl.enter="doneEdit(note, $event)"
+                @keyup.esc="cancelEdit(note)"
+                @keyup.ctrl.up="editTodo(note, $event)"
+                @keyup.ctrl.down="editTodo(note, $event)"
+                @keydown.alt.t.prevent="gotoTerms"
+                @keydown.alt.g.prevent="gotoGoals"
+                @keydown.alt.c.prevent="gotoContexts"
+                @blur="doneEdit(note, $event)"
+                ></textarea>
+
+                <div class="coding"  v-if="note.title.startsWith('>')">
+                  <div v-if="note.hasOwnProperty('commandFailure') && note.commandFailure !== ''" class="alert alert-danger" role="alert">
+                      <label>Command Failure</label>
+                      <pre>{{note.commandFailure}}</pre>
+                      <button class="undo" @click="clear(note)"><i class="fas fa-times"></i></button>
+                  </div>
+                  <div v-else-if="note.hasOwnProperty('commandResult') && note.commandResult !== ''" class="alert alert-success" role="alert">
+                    <pre v-html="note.commandResult"></pre>
+                    <button class="undo" @click="clear(note)"><i class="fas fa-times"></i></button>
+                  </div>
+                  <div v-else>
+                      <label><i>Code [ ]</i></label>
+                  </div>
+                </div>
+                <textarea id="cmd"
+                          class="new-note"
+                          autofocus
+                          autocomplete="off"
+                          placeholder="What needs to be done?"
+                          v-model="newTodo"
+                          v-if="index === noteIndex"
+                          @keyup.ctrl.enter="addTodo"
+                          @keydown.alt.t.prevent="gotoTerms"
+                          @keydown.alt.g.prevent="gotoGoals"
+                          @keydown.alt.c.prevent="gotoContexts"
+                ></textarea>
+
+              </li>
+
+            </ul>
+
+          </section>
+        <textarea id="cmd"
+                  class="new-note"
+                  autofocus
+                  autocomplete="off"
+                  placeholder="What needs to be done?"
+                  v-model="newTodo"
+                  v-show="notes.length === 0"
+                  @keyup.ctrl.enter="addTodo"
+                  @keydown.alt.t.prevent="gotoTerms"
+                  @keydown.alt.g.prevent="gotoGoals"
+                  @keydown.alt.c.prevent="gotoContexts"
+        ></textarea>
+      </section>
+
+      <section class="noterefby">
+        <h3>References:</h3>
+        <ol>
+          <li v-for="(reference, index) in noterefsto">
+            <a target="refto-page" :href="reference.url">{{reference.label}}</a> <label @click="removeRefTo(index)">x</label>
+          </li>
+        </ol>
+            <input id="refto" v-model="refto" type="text" class="form-control"
+                   @keyup.ctrl.space="autocompRefTo"
+                   @keyup.enter="addRefTo"
+                   @keydown.alt.t.prevent="gotoTerms"
+                   @keydown.alt.g.prevent="gotoGoals"
+                   @keydown.alt.c.prevent="gotoContexts"
+                   >
+      </section>
+
+      <section class="noteterms">
+        <h3>Terms:</h3>
+        <ol>
+          <li v-for="(reference, index) in noteterms">
+            <a target="term-page" :href="reference.url">{{reference.label}}</a> <label @click="removeTerm(index)">x</label>
+          </li>
+        </ol>
+            <input id="term" v-model="term" type="text" class="form-control"
+                   @keyup.ctrl.space="autocompTerm"
+                   @keyup.enter="addTerm"
+                   @keydown.alt.t.prevent="gotoTerms"
+                   @keydown.alt.g.prevent="gotoGoals"
+                   @keydown.alt.c.prevent="gotoContexts"
+                   >
+      </section>
+  </div> <!--panel-->
+
+  </div><!--app-->
+
+    <script src="noteedit.js"></script>
+  </body>
+</html>
+

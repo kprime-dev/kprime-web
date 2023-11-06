@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KP Search</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="/js/vue.js"></script>
+    <script src="/js/vue-resources.js"></script>
+    <script src="/js/jquery.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="/js/bootstrap.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+</head>
+<body class="executive">
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="http://kprime.it/"><img height="50px" src="/img/kprime-logo-bw.png" alt="KPrime"></a></li>
+        <li class="breadcrumb-item "><a href="/"><img height="40px" src="/img/login.png" alt="Login"> Login</a></li>
+        <li class="breadcrumb-item active"><img height="50px" src="/img/search.png" alt="Search"> Search</li>
+        <li class="breadcrumb-item "><a href="/project/"><img height="50px" src="/img/project_b.png" alt="Projects"> Contexts</a></li>
+    </ol>
+</nav>
+<div id="app">
+<div id="content" class="kprime-panel" style="margin:30px">
+    <img src="/img/kprime-logo-bw.png">
+    <input id="toSearch" v-model="textToSearch" @keyup.enter="clickOnSearch()" autofocus>
+    <button  type="button" class="btn btn-primary" name="Find" value="Find" @click="clickOnSearch()">Find</button>
+    <hr>
+    <table class="table-result" v-if="hasResult">
+        <tr>
+            <th>Type</th>
+            <th>Position</th>
+        </tr>
+        <tr v-for="result in searchResult">
+            <td>
+                {{result.type}}
+            </td>
+            <td v-html="result.position">
+            </td>
+        </tr>
+    </table>
+</div>
+</div>
+
+<script  type="module" src="search.js"></script>
+
+</body>
+</html>

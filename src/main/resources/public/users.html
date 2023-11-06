@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KPrime</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+
+    <script src="js/jquery.js" ></script>
+    <script src="js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/kprime.css">
+
+</head>
+<body>
+    <h1><a href="/"><img class="logo" src="img/kprime-logo-bw.png"></a> Users</h1>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" >Home</a></li>
+        </ol>
+    </nav>
+    <div class="alert alert-info" role="alert">
+        <p>Users are people that can access KPrime.</p>
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">Add a new user</a>
+    </div>
+
+
+    <div id="app-users">
+
+        <div v-if="errorMessage" class="alert alert-danger" role="alert">
+            <p>{{errorMessage}}</p>
+        </div>
+
+        <div v-if="successMessage" class="alert alert-success" role="alert">
+            <p>{{successMessage}}</p>
+        </div>
+
+
+        <div class="container-fluid">
+            <div class="row">
+
+            <div v-for="user in users" class="col-sm">
+
+<!--                <div class="card-group">-->
+                <div class="card" style="width: 18rem;">
+                    <img src="img/user.png" class="card-img-top" alt="...">
+                    <transition name="fade">
+                    <div class="card-body card-img-overlay">
+                        <h5 class="card-title">{{ user.name }}</h5>
+                        <h5>{{ user.role }}</h5>
+                        <h5>{{ user.memberOf }}</h5>
+                        <button class="btn btn-primary"  @click="editUser(user)" data-toggle="modal" data-target="#editUserModal">Edit</button>
+                        <button class="btn btn-danger" @click="removeUser(user)">X</button>
+                    </div>
+                    </transition>
+                </div>
+<!--                </div>-->
+
+            </div>
+            </div>
+        </div>
+
+
+    <div id="addUserModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Actor:</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Name:</p>
+                    <input v-model="newUser.name">
+                    <p>Role:</p>
+                    <input v-model="newUser.role">
+                    <p>Member of:</p>
+                    <input v-model="newUser.memberOf">
+                    <p>Pass:</p>
+                    <input v-model="newUser.pass">
+                    <p>Email:</p>
+                    <input v-model="newUser.email">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" @click="addSaveUser()" class="btn btn-success">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div id="editUserModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Actor: {{editingUser.name}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Name:</p>
+                        <input v-model="editingUser.name">
+                        <p>Role:</p>
+                        <input v-model="editingUser.role">
+                        <p>Member of:</p>
+                        <input v-model="editingUser.memberOf">
+                        <p>Pass:</p>
+                        <input v-model="editingUser.pass">
+                        <p>Email:</p>
+                        <input v-model="editingUser.email">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="editSaveUser()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="users.js"></script>
+
+</body>
+</html>

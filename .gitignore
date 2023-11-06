@@ -1,0 +1,7 @@
+target/
+*.iml
+.idea/
+kprime-webapp
+release/
+logs/
+settings/

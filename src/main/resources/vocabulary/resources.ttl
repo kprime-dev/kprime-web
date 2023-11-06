@@ -1,0 +1,249 @@
+@prefix : <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/dev/misc/resources.ttl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+
+
+<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> 
+	:type "ontology" ;
+	rdfs:label "NIF 2.0 Core Ontology"@en ;
+	:highlight "true" ;
+	:prefix "nif:" ;
+	:versioningLevel "IRI-level via owl:versionInfo" ;
+	:revisions	"GitHub, Changelog written to rdfs:comment" ;
+	:example """ """; 
+	:status "Mature core vocabulary. Persistent hosting." ;
+	:versioningMethod """The version number (loosely) follows http://semver.org/ . All classes and properties starting with 0.x.y are not stable and might be removed anytime. As soon as a class or property reaches 1.x.y it will not be deleted anymore and will remain in the ontology.  This means it will be terminological stable. The version number will be incremented to 2.x.y if use of the URL is deprecated. Further increments (<= 3 ) are not used. """ ;
+	:description """Classes and properties to describe the relations between substrings, text, documents by assigning URIs to strings. Also provides additional vocabulary to attach (linguistic) annotations to substrings, optionally linking into Linked Data representations of linguistic concepts and phenomena (e.g. OLiA or lemon).""" .
+
+<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/rlog#> 
+	:type "ontology" ;
+	rdfs:label "RLOG - an RDF Logging Ontology"@en ;
+	:prefix "rlog:" ;
+	:versioningLevel "Ontology IRI" ;
+	:versioningMethod "As specified in http://semver.org/" ;
+	:revisions	"GitHub" ;
+	:status "Mature" ;
+	:description """ We prefer to keep as much information as possible within the ontology itself, please have a look there. """ .
+
+<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/stc#> 
+	:type "ontology" ;
+	rdfs:label "STC - Simple Test Case Ontology"@en ;
+	:prefix "stc:" ;
+	:versioningLevel "Ontology IRI" ;
+	:versioningMethod "As specified in http://semver.org/" ;
+	:revisions	"GitHub" ;
+	:status "Development finished, but not persistent" ;
+	:description """This ontology is a helper ontology and just use for some validation of RDF tool output by tools implementing NIF. We prefer to keep as much information as possible within the ontology itself, please have a look there. """ .
+
+<http://persistence.uni-leipzig.org/nlp2rdf/ontologies/testcase/lib/nif-2.0-suite.ttl> 
+	:type "ontology" ;
+	rdfs:label "NIF Validator TestCase Suite"@en ;
+	:versioningLevel "Ontology IRI" ;
+	:versioningMethod "As specified in http://semver.org/" ;
+	:revisions	"GitHub, changelog in rdfs:comment" ;
+	:status "Mature" ;
+	:description """A collection of SPARQL queries to validate NIF models.""" .
+
+<http://persistence.uni-leipzig.org/nlp2rdf/specification/version.html> 
+	:type "specification" ;
+	rdfs:label "License, Persistence, Versioning"@en ;
+	:versioningLevel "Document" ;
+	:versioningMethod "As specified in http://semver.org/" ;
+	:revisions	"GitHub, previous versions are kept on the server, persistently." ;
+	:status "see resource itself" ;
+	:description """todo: add description.""" .
+	
+
+<http://persistence.uni-leipzig.org/nlp2rdf/specification/api.html> 
+	:type "specification" ;
+	:highlight "true" ;
+	rdfs:label "Public API Specification"@en ;
+	:versioningLevel "Document" ;
+	:versioningMethod "As specified in http://semver.org/" ;
+	:revisions	"GitHub, previous versions are kept on the server, persistently." ;
+	:status "Under development" ;
+	:description """A document specifying the public API requirements of tools implementing NIF.""" .
+
+<http://persistence.uni-leipzig.org/nlp2rdf/specification/stanbol.html> 
+	:type "specification" ;
+	rdfs:label "NIF 2.0 Stanbol Profile Specification"@en ;
+	:versioningLevel "Document" ;
+	:versioningMethod "As specified in http://semver.org/" ;
+	:revisions	"GitHub, previous versions are kept on the server, persistently." ;
+	:status "Under development" ;
+	:description """Early description of the NIF Stanbol profile. """ .
+
+<http://persistence.uni-leipzig.org/nlp2rdf/specification/core.html> 
+	:type "specification" ;
+	:highlight "true" ;
+	rdfs:label "NIF 2.0 Core Specification"@en ;
+	:versioningLevel "Document" ;
+	:versioningMethod "As specified in http://semver.org/" ;
+	:revisions	"GitHub, previous versions are kept on the server, persistently." ;
+	:status "Under development" ;
+	:description """ A document specifying the core of NIF.""" .
+	
+<http://nlp2rdf.lod2.eu/releases/nif-2.0-stanford-core-cli-beta.jar> 
+	:type "software" ;
+	:highlight "true" ;
+	rdfs:label "NIF 2.0 Stanford Core Implementation"@en ;
+	:versioningLevel "not versioned, just an early release, but working" ;
+	:versioningMethod "none" ;
+	:revisions	"GitHub" ;
+	:status "Working, undocumented beta, cli, jetty web server via Maven" ;
+	:code "https://github.com/NLP2RDF/software/tree/master/java-maven/implementation/stanford-core" ;
+	:example """ echo \"My favourite actress is Natalie Portman.\" | ./nif-2.0-stanford-core-cli-beta.jar -f text """ ;
+	:description """Download the jar from <href=\"http://nlp2rdf.lod2.eu/releases/nif-2.0-stanford-core-cli-beta.jar\">http://nlp2rdf.lod2.eu/releases/nif-2.0-stanford-core-cli-beta.jar</a>. 
+	Code can be found here: <a href=\"https://github.com/NLP2RDF/software/tree/master/java-maven/implementation/stanford-core\">https://github.com/NLP2RDF/software/tree/master/java-maven/implementation/stanford-core</a>
+	Clone the code and start the server with mvn jetty:run ,
+	See parameters with ./stanford-core-beta-with-lemma-pos-cccollapseddependencies.jar --help
+	""" .
+	
+	
+<https://github.com/NLP2RDF/software#nif-validator> 
+	:type "software" ;
+	:highlight "true" ;
+	rdfs:label "NIF 2.0 Validator Tool"@en ;
+	:versioningLevel "java -jar validate.jar -v" ;
+	:versioningMethod "Versioning relies on NIF Validator TestCase Suite and the API specification" ;
+	:revisions	"GitHub" ;
+	:status "Mature" ;
+	:description """Documentation can be found here: <a href="https://github.com/NLP2RDF/software#nif-validator">https://github.com/NLP2RDF/software#nif-validator</a>""" .
+
+<https://github.com/dbpedia-spotlight/dbpedia-spotlight/wiki/Web-service>
+	:type "software" ;
+	:highlight "true" ;
+	rdfs:label "DBpedia Spotlight implementation of NIF"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"GitHub" ;
+	:status "Mature" ;
+	:description """Documentation can be found here: <a href="https://github.com/NLP2RDF/software#nif-validator">https://github.com/NLP2RDF/software#nif-validator</a>""" .
+	
+	
+<https://github.com/NLP2RDF/software/wiki/How-to-publish-a-txt-corpora-with-NIF-as-Linked-Data> 
+	:type "wikipage" ;
+	rdfs:label "How to publish a txt corpora with NIF as Linked Data"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "GitHub" ;
+	:revisions	"GitHub" ;
+	:status "Under development, possibly outdated" ;
+	:description """Wiki page""" .
+
+<http://www.w3.org/TR/its20/#conversion-to-nif> 
+	:type "specification" ;
+	rdfs:label "W3C Conversion of ITS 2.0 to NIF"@en ;
+	:versioningLevel "Document" ;
+	:versioningMethod "W3C specific" ;
+	:revisions	"W3C specific" ;
+	:status "W3C Last Call Working Draft 20 August 2013" ;
+	:description """This section provides an informative algorithm to convert XML or HTML documents (or their DOM representations) that contain International TagSet (ITS) 2.0 metadata to the RDF format based on [NIF]. The conversion results in RDF triples.""" .
+
+<http://www.w3.org/TR/its20/#nif-backconversion> 
+	:type "specification" ;
+	rdfs:label "W3C Conversion of NIF to ITS 2.0"@en ;
+	:versioningLevel "Document" ;
+	:versioningMethod "W3C specific" ;
+	:revisions	"W3C specific" ;
+	:status "W3C Last Call Working Draft 20 August 2013" ;
+	:description """The conversion from International TagSet (ITS) 2.0 to NIF is a possible basis for a natural language processing (NLP) application that creates, for example, named entity annotations. A non-normative algorithm to integrate these annotations into the original input document is given in Appendix G: Conversion NIF2ITS. Many decisions to be made in this algorithm depend on the particular NLP application being used.""" .
+	
+<http://demo.nlp2rdf.aksw.org/> 
+	:type "demo" ;
+	rdfs:label "NIF Combinator Demo"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"GitHub" ;
+	:status "working, but outdated" ;
+	:code "https://github.com/NLP2RDF/software/blob/master/php/demo/demo.php" ;
+	:description """A GUI called the NIF Combinator, which allows to combine the output of the implemented NIF web services. http://svn.aksw.org/papers/2012/NIF/EKAW_DEMO/public_preprint.pdf‎""" .
+
+<http://nlp2rdf.lod2.eu/nif-ws.php> 
+	:type "demo" ;
+	:highlight "true" ;
+	rdfs:label "NIF Conversion Demo Service"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"GitHub" ;
+	:status "working, implements 2.0, not yet complete, but already usefull" ;
+	:code "https://github.com/NLP2RDF/software/blob/master/php/nif-ws.php" ;
+	:description """Implements the new NIF 2.0 API specification, deployement of the reference implementation‎""" .
+
+
+	
+<http://wiki-link.nlp2rdf.org/> 
+	:type "corpus" ;
+	rdfs:label "Wiki-Link Corpus in RDF"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"n/a" ;
+	:status "working" ;
+	:code "" ;
+	:description """Data from the wikilinks corpus (https://code.google.com/p/wiki-link/) was converted to NIF""" .
+
+<http://brown.nlp2rdf.org/> 
+	:type "corpus" ;
+	rdfs:label "Brown Corpus in RDF"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"n/a" ;
+	:status "working" ;
+	:code "" ;
+	:description """Data from the Brown corpus (http://icame.uib.no/brown/bcm.html) was converted to NIF""" .
+
+<https://raw.github.com/AKSW/n3-collection/master/News-100.ttl> 
+	:type "corpus" ;
+	rdfs:label "News-100 NER Corpus in NIF"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"n/a" ;
+	:status "working" ;
+	:code "" ;
+	:description """Extracting Linked Data following the Semantic Web paradigm from unstructured sources has become a key driver for scientific research as well as new business models. Named Entity Recognition and Disambiguation are two basic steps in this extraction process. One key driver to realize the vision of the Semantic Web and develop highly accurate tools is the availability of data for performance validation. In this article, we present three novel, manually curated and annotated corpora, N3. Furthermore, we based them on a free licence and stored in the NLP Interchange Format for interoperability reasons. See http://aksw.org/Projects/N3NERNEDNIF.html""" .
+
+<https://raw.github.com/AKSW/n3-collection/master/RSS-500.ttl> 
+	:type "corpus" ;
+	rdfs:label "RSS-500 NER Corpus in NIF"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"n/a" ;
+	:status "working" ;
+	:code "" ;
+	:description """Extracting Linked Data following the Semantic Web paradigm from unstructured sources has become a key driver for scientific research as well as new business models. Named Entity Recognition and Disambiguation are two basic steps in this extraction process. One key driver to realize the vision of the Semantic Web and develop highly accurate tools is the availability of data for performance validation. In this article, we present three novel, manually curated and annotated corpora, N3. Furthermore, we based them on a free licence and stored in the NLP Interchange Format for interoperability reasons. See http://aksw.org/Projects/N3NERNEDNIF.html""" .
+
+<https://raw.github.com/AKSW/n3-collection/master/Reuters-128.ttl> 
+	:type "corpus" ;
+	rdfs:label "Reuters-128 NER Corpus in NIF"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"n/a" ;
+	:status "working" ;
+	:code "" ;
+	:description """Extracting Linked Data following the Semantic Web paradigm from unstructured sources has become a key driver for scientific research as well as new business models. Named Entity Recognition and Disambiguation are two basic steps in this extraction process. One key driver to realize the vision of the Semantic Web and develop highly accurate tools is the availability of data for performance validation. In this article, we present three novel, manually curated and annotated corpora, N3. Furthermore, we based them on a free licence and stored in the NLP Interchange Format for interoperability reasons. See http://aksw.org/Projects/N3NERNEDNIF.html""" .
+
+<http://www.yovisto.com/labs/ner-benchmarks/data/dbpedia-spotlight-nif.ttl>
+	:type "corpus" ;
+	rdfs:label "DBpedia Spotlight evaluation datasets"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"n/a" ;
+	:status "working" ;
+	:code "" ;
+	:description """Conversion of evaluation datasets into NIF. See also http://ceur-ws.org/Vol-1064/Steinmetz_Statistical.pdf""" .
+
+<http://www.yovisto.com/labs/ner-benchmarks/data/kore50-nif.ttl>
+	:type "corpus" ;
+	rdfs:label "KORE 50 evaluation dataset in NIF"@en ;
+	:versioningLevel "n/a" ;
+	:versioningMethod "n/a" ;
+	:revisions	"n/a" ;
+	:status "working" ;
+	:code "" ;
+	:description """Conversion of evaluation datasets into NIF. See also http://ceur-ws.org/Vol-1064/Steinmetz_Statistical.pdf""" .
+
+<http://persistence.uni-leipzig.org/nlp2rdf/documents/2013-09-19-poster-meta-forum/nif2poster.png> 
+	:type "poster" ;
+	:highlight "true" ;
+	rdfs:label "Promotional poster for Meta Forum"@en ;
+	:status "A poster with images from the ISWC 2013 publication." ;
+	:description """The poster provides a good overview of NIF 2.0.""" .
+	

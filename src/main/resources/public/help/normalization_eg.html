@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPrime Help: normalization</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link href="../css/remark.css" rel="stylesheet">
+</head>
+<body>
+<textarea id="source">
+
+# KPrime Help
+## Normalization Examples
+
+* First Normal Form.
+* Second Normal Form.
+* Third Normal Form.
+* BoyceCodd Normal Form.
+* Closure.
+* Mimimal basis.
+* Projection.
+* Superkey.
+
+---
+## Employee Example
+
+    To understand these anomalies let us take an example of a employee table.
+
+.st.st-vline.font-sm.mb-xs[
+| Name       | Price | Number |
+| ----       | ----  | ----:  |
+| Banana     | $1    | 5      |
+| Apple      | $1    | 6      |
+| Strawberry | $1    | 7      |
+]
+
+```ts
+create table Employee (rollno int,	name varchar(50),	branch	varchar(50),hod	varchar(50),office_tel varchar(20))
+insert into Employee values(401, 'Akon', 'CSE' ,'Mr. X' ,'53337')
+```
+
+---
+## First Normal Form 1NF
+
+---
+## Second Normal Form 2NF
+
+---
+## Third Normal Form 3NF
+
+---
+## BCNF Normal Form BCNF
+
+---
+## Forth and Fifth Normal Form 4NF & 5NF
+
+---
+## Closure
+a-->b;a-->c;a-->d;c-->d;c-->e
+c
+c, d, e
+
+a
+a, b, c, d, e
+
+b
+b
+
+---
+## Minimal
+
+a --> b
+c --> d
+a --> c
+c --> e
+
+---
+## Projection
+
+    quali sono le FD che rimangono usando un sottoinsieme di colonne?
+
+a,b,c,d
+c --> d
+a --> b
+a --> c
+
+---
+## Superkeys
+
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        //     {left: "$$", right: "$$", display: true},
+        //     {left: "$", right: "$", display: false},
+        //     {left: "\\[", right: "\\]", display: true},
+        //     {left: "\\(", right: "\\)", display: false},
+        // ]});
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

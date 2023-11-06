@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KP Chart Entity</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="/js/jquery.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="/js/bootstrap.js"></script>
+<!--    <link rel="stylesheet" href="/css/kprime.css">-->
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/animate.css">
+
+</head>
+<body class="executive">
+<h1><a href="/"><img class="logo" height="100px" src="/img/kprime-logo-bw.png"></a> Dictionary</h1>
+<!--
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" >Home</a></li>
+        <li class="breadcrumb-item active"><a href="/dictionary.html" >Dictionary</a></li>
+    </ol>
+</nav>
+-->
+
+<div class="mermaid animated bounceInRight ">
+graph LR
+{{markdownDiag}}
+</div>
+
+
+<script src="https://unpkg.com/mermaid@8.9.0/dist/mermaid.min.js"></script>
+<!--
+<script>
+</script>
+
+  <script src="https://unpkg.com/mermaid@7.1.0/dist/mermaid.min.js"></script>
+-->
+<script>
+    var callback = function(){
+	alert('A callback was triggered');
+    }
+
+    var config = {
+      startOnLoad:true,
+      flowchart:{
+        useMaxWidth:false,
+        htmlLabels:true,
+        curve:'cardinal',
+      },
+      securityLevel:'loose',
+    };
+
+    mermaid.initialize(config);
+  </script>
+</body>
+</html>

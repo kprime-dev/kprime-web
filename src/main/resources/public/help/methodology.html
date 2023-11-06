@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPrime Help: normalization</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link href="../css/remark.css" rel="stylesheet">
+</head>
+<body>
+<textarea id="source">
+# [KPrime Help](index.html) : Methodology
+
+We will propose our methodology following the phases and steps described in the papaer:
+
+from A Pay-as-you-go Methodology to Design and Build Enterprise Knowledge Graphs from Relational Databases
+
+by Juan F. Sequeda, Willard J. Briggs, Daniel P. Miranker, and Wayne P. Heideman
+
+---
+
+Methodology phases and steps:
+
+    1. Phase 1: Knowledge Capture
+    1.1 Step 1: Analyze
+    1.2 Step 2: Collect
+    1.3 Step 3: Develop Knowledge Report
+
+    2. Phase 2: Knowledge Enrichment
+    2.1 Step 4: Create/Extend Ontology
+    2.2 Step 5: Implement Mapping
+    2.3 Step 6: Extract Queries
+    2.4 Step 7: Validate with Data
+
+    3. Phase 3: Publish
+
+---
+## Phase 1: Knowledge Capture
+
+When a business question needs to be answered, we first need to understand the larger context: what is the business problem that needs to be addressed? Is it currently being addressed, and if so, how?
+
+---
+### Step 1: Analyze Processes
+
+Answering the following questions help achieve this goal:
+
+What: What are the business questions? What is the business problem?
+Why: Why do we need to answer these questions? What is the motivation?
+
+* goals: add-actor
+* goals: add-todo
+* experts: add-expert istar
+
+* [IStar](istar.html)
+* [DDD Strategic](ddd.html)
+* [EventStorm](eventstorm.html)
+
+---
+### Step 2: Collect Documentation
+Answering the following questions :
+Who: Who produces the data? Who will consume the data? Who is involved?
+How: How is this the business question answered today, if at all?
+Where: Where are the data sources required to answer the business questions?
+When: When will the data be consumed? Real-time? Daily? Update criteria?
+
+* stories: add-story
+---
+### Step 3: Develop Knowledge Report
+Starts working with the Business User to understand the business
+questions, recognize key concepts and relationships from the business questions, identify the business terminology.
+Detailing the CARs (Concepts, Attributes
+and Relationships), with the corresponding SQL logic which serve as the mapping to the relational database
+
+* terms: add-terms
+* stories: add-story
+* experts: add-expert wikipedia
+
+---
+## Phase 2: Knowledge Implementation
+Ease the transformation into a formal ontology language.
+---
+### Step 4: Create/Extend Ontology
+
+* terms: add-terms
+* terms: add-fact
+* terms: add-vocabulary
+
+* transformers: add-transformer
+* experts: add-expert transform
+* experts: add-expert gufo
+
+* [ER](er.html)
+* [gUFO](gufo.html)
+* [data models](models.html)
+* [transformation](transformations.html)
+
+---
+
+### Step 5: Implement Mapping
+create an R2RML mapping
+
+* terms: add-source
+* terms: add-table
+* terms: add-mappings
+* experts: add-expert orm
+
+* [ORM](orm.html)
+* data storage security privacy
+
+---
+
+### Step 6: Extract Queries
+Recall that an Extract is the definition of the tabular result that a Business User would like to access.
+
+* traces: extract-queries
+
+* [normalization](normalization.html)
+* [normalization examples](normalization_eg.html)
+
+---
+
+### Step 7: Validate Data
+
+* terms: select
+* experts: add-expert ltn
+* experts: add-expert refine
+
+* [missing](missing_null.html)
+* [vague](vague_fuzzy.html)
+
+---
+
+### Step 8: Validate Model
+
+* VUCA dimensions
+* goals todo chart
+* goals changeset chart
+* goals gantt
+
+* [VUCA](vuca.html)
+
+---
+
+## Phase 3: Publish
+
+* as static site
+* as PDF document
+* as live site with hot data and schema from queries
+* access authorizations
+* log consumes
+
+
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        //     {left: "$$", right: "$$", display: true},
+        //     {left: "$", right: "$", display: false},
+        //     {left: "\\[", right: "\\]", display: true},
+        //     {left: "\\(", right: "\\)", display: false},
+        // ]});
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

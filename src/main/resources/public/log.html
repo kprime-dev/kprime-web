@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KP Events</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+    <script src="https://unpkg.com/marked@4.0.16"></script>
+    <script src="js/lodash.min.js"></script>
+
+
+    <!--<script src="js/jquery.js"></script>-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="js/jpopper.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="js/bootstrap.js"></script>
+    <!--<script src="js/awesomplete.js"></script>-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+
+</head>
+<body>
+<div id="app-traces">
+    <h1><a href="/"><img class="logo" src="img/kprime-logo-bw.png"></a> {{currentProject}} Events
+        <span v-if="wsClosed" class="kprime-panel">CONNECTION CLOSED <img style="width:40px" src="/img/light-red.png"></span>
+        <span v-else class="kprime-panel">CONNECTION OPEN <img style="width:40px" src="/img/light-green.png"></span>
+    </h1>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary"> <a style="color:white" href="/"><img alt="home" width="30px" src="/img/home.png"></a> </button>
+                <button type="button" class="btn btn-primary"> <a style="color:white" target="help" href="/help/methodology.html#2"><img alt="help" width="30px" src="/img/help.png"></a> </button>
+                <button v-if="wsClosed" class="btn btn-primary" style="color:white">CONNECTION CLOSED <img style="width:40px" src="/img/light-red.png"></button>
+                <button v-else class="btn btn-primary" style="color:white">CONNECTION OPEN <img style="width:40px" src="/img/light-green.png"></button>
+            </div>
+            <hr>
+            <div class="kprime-panel">
+                Message: {{wsMessage}}
+            </div>
+            <div class="kprime-panel">
+                <h3>Commands:</h3>
+                <table>
+                    <tr>
+                        <th>Command</th>
+                        <th>Author</th>
+                        <th>Requested On</th>
+                        <th>Result</th>
+                    </tr>
+                <tr v-for="event in eventList">
+                    <td>{{event.command}}</td>
+                    <td>{{event.author}}</td>
+                    <td>{{event.time}}</td>
+                    <td>{{event.result}} {{event.warn}} {{event.errors}}</td>
+                </tr>
+                </table>
+            </div>
+
+            <!-- content -->
+            <div class="animated slideInLeft kprime-panel">
+
+                <div v-if="fileeditable === false" class="row">
+                    <div class="col-10">
+                        <div class="input-group row">
+                            <div class="input-group-prepend col-sm-2">
+                                <span class="input-group-text">Command</span>
+                            </div>
+                            <div class="col-sm-7">
+                                <input id="cmd" v-model="command" type="text" @keyup.enter="keyUpCommand" class="form-control">
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div v-if="spinning" class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div v-if="commandFailure" class="alert alert-danger" role="alert">
+                            <label>Command Result:</label>
+                            <pre v-if="commandFailure">{{commandFailure}}</pre>
+                        </div>
+                        <div v-if="commandResult" class="alert alert-success" role="alert">
+                            <label>Command Result:</label>
+                            <pre v-if="commandResult">{{commandResult}}</pre>
+                        </div>
+                    </div><!-- col -->
+                    <div class="col-2">
+                    </div><!-- col -->
+                </div> <!-- row -->
+            </div>
+
+
+</div> <!-- app -->
+<script src="log.js"></script>
+</body>
+</html>

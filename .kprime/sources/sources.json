@@ -1,0 +1,1 @@
+[{"id":"1","type":"mysql","name":"confu","driver":"com.mysql.cj.jdbc.Driver","location":"jdbc:mysql://localhost:3306/db_monitoring","user":"user","pass":"password","license":"","licenseUrl":"","driverUrl":""}]

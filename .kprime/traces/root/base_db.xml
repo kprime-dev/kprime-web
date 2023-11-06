@@ -1,0 +1,42 @@
+<database name="" id="" time="Mon Mar 20 17:16:17 CET 2023" source="" vocabulary="">
+  <schema name="" id="">
+    <tables/>
+    <constraints/>
+  </schema>
+  <mappings>
+    <query id="" name="Actor">
+      <select>
+        <distinct>false</distinct>
+        <attributes>
+          <attribute name="*" asName=""/>
+        </attributes>
+        <from tableName="project;" alias=""/>
+        <where condition=""/>
+      </select>
+      <union>
+        <selects/>
+      </union>
+      <minus>
+        <selects/>
+      </minus>
+      <options>-source=confu</options>
+    </query>
+    <query id="" name="map1">
+      <select>
+        <distinct>false</distinct>
+        <attributes>
+          <attribute name="*" asName=""/>
+        </attributes>
+        <from tableName="project;" alias=""/>
+        <where condition=""/>
+      </select>
+      <union>
+        <selects/>
+      </union>
+      <minus>
+        <selects/>
+      </minus>
+      <options>-source=confu</options>
+    </query>
+  </mappings>
+</database>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KP Dictionary</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+
+    <script src="https://unpkg.com/marked@4.0.16"></script>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+</head>
+<body>
+
+    <audio id="clickAudio">
+        <source src="/audio/rclick.mpeg" type="audio/mpeg">
+    </audio>
+    <audio id="triggerAudio">
+        <source src="/audio/trigger.ogg" type="audio/ogg">
+        <source src="/audio/trigger.mpeg" type="audio/mpeg">
+    </audio>
+
+    <div id="app-terms">
+
+        <div style="width:100%;"  class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" style="width:100%;">
+                <button type="button" class="btn btn-secondary"> <a style="color:white" href="/"><img class="logo" height="30px" src="img/kprime-logo-bw.png"></a></button>
+                <button type="button" class="btn btn-secondary"> <a style="color:white" href="/admin.html"><img alt="context" width="30px" src="/img/context-icon.png"></a> </button>
+                <button type="button" class="btn btn-secondary"> <a style="color:white" href="/todos.html"><img alt="goal" width="30px" src="/img/todo-ok.png"></a> </button>
+                <button type="button" class="btn btn-secondary"> <a style="color:white" href="/noteedit.html"><img alt="story" width="30px" src="/img/obiettivo.png"></a> </button>
+                <button type="button" class="btn btn-secondary disabled"><img alt="term" width="30px" src="/img/linked-data.png"> </button>
+                <button type="button" class="btn btn-secondary"> <a style="color:white" target="help" href="/help/methodology.html#3"><img alt="help" width="30px" src="/img/help.png"></a> </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" v-bind:class="{ disabled: notHasProjects}" data-toggle="dropdown">
+                        Contexts
+                    </button>
+                    <div class="dropdown-menu">
+                        <a v-for="project in projects" class="dropdown-item" href="#" @click="clickOnProject(project)" >{{project.name}}</a>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary">
+                    <a target="_blank" @click="clickOnMarkdown()"><img alt="markdown" width="30px" src="/img/markdown-icon.png"></a>
+                </button>
+                <div class="btn-group" v-if="currentDatabase" >
+                    <button type="button" class="btn btn-secondary"  >
+                        <a v-bind:href="'/project/'+currentProject+'/dictionary'" target="_blank" style="color:white">Page</a>
+                    </button>
+                    <button type="button" class="btn btn-secondary" >
+                        <a v-bind:href="'/context/'+currentProject+'/dictionary/'+currentTrace+'/'+currentDatabase+'/json'" target="_blank" style="color:white">Json</a>
+                    </button>
+                    <button type="button" class="btn btn-secondary" >
+                        <a v-bind:href="'/context/'+currentProject+'/dictionary/'+currentTrace+'/'+currentDatabase+'/turtle'" target="_blank" style="color:white">Turtle</a>
+                    </button>
+                    <button type="button" class="btn btn-secondary" >
+                        <a v-bind:href="'/context/'+currentProject+'/swagger'" target="_blank" style="color:white">Swagger</a>
+                    </button>
+                    <button type="button" class="btn btn-secondary" >
+                        <a v-bind:href="'/context/'+currentProject+'/chart/classes/'+currentTrace+'/'+currentDatabase" target="_blank" style="color:white;white-space: nowrap;">Chart Terms</a>
+                    </button>
+                    <button type="button" class="btn btn-secondary" >
+                        <a v-bind:href="'/project/'+currentProject+'/chart/labels'" target="_blank" style="color:white;white-space: nowrap;">Chart Labels</a>
+                    </button>
+                </div>
+                <div class="btn btn-secondary" style="width:100%;"></div>
+            </div>
+        </div>
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                {{currentProject}} terms
+            </li>
+        </ol>
+
+        <div v-if="messageFailure" class="alert alert-danger" role="alert">
+            <label>Failure:</label>
+            <pre>{{messageFailure}}</pre>
+        </div>
+        <div v-if="messageSuccess" class="alert alert-success" role="alert">
+            <label>Success:</label>
+            <pre>{{messageSuccess}}</pre>
+        </div>
+
+        <div style="margin:30px">
+          <div  class="animated kprime-panel" class="slideInLeft">
+            <h4>Vocabularies {{contextVocabularies.length}}
+                <button  class="btn btn-success btn-sm" data-toggle="modal" data-target="#vocabularyModal" >+</button>
+                <select id="type1" v-model="vocabularyToAdd" @change="onAddInstanceVocabulary($event)">
+                    <option v-for="vocabulary in vocabularies" :value="vocabulary.prefix">{{vocabulary.prefix}}-{{vocabulary.description}}</option>
+                </select>
+                <a  class="btn btn-primary btn-sm" target="vocabularies" href="/vocabularies.html" ><img width="30px" src="/img/linked-data.png"></a> :
+            </h4>
+            <span class="badge bg-primary"><a  style="color:white;" href="#" @click="showVocabularies(true)" >&dArr;</a></span>
+            <span class="badge bg-primary"><a  style="color:white;" href="#" @click="showVocabularies(false)" >&uArr;</a></span>
+            <table v-if="isVisibleVocabularies">
+                <tr v-for="voc in contextVocabularies">
+                    <td><a v-bind:href="voc.reference" target="voc">{{voc.prefix}}</a></td>
+                    <td><a v-bind:href="voc.namespace" target="voc">{{voc.namespace}}</a></td>
+                    <td>{{voc.description}}</td>
+                    <td><button class="btn btn-danger btn-sm"  @click="removeVocabulary(voc)">X</button></td>
+                </tr>
+            </table>
+          </div>
+
+          <div  class="animated kprime-panel" class="slideInLeft">
+              <h4>Sources {{contextSources.length}}
+                  <button  class="btn btn-success btn-sm" data-toggle="modal" data-target="#sourceModal" >+</button>
+                  <select id="type2" v-model="sourceToAdd" @change="onAddInstanceSource($event)">
+                      <option v-for="source in sources" :value="source.name">{{source.name}}-{{source.type}}</option>
+                  </select>
+                  <a  class="btn btn-primary btn-sm" target="sources" href="/sources.html" ><img width="30px" src="/img/source.png"></a> :
+              </h4>
+              <span class="badge bg-primary"><a  style="color:white;" href="#" @click="showSources(true)" >&dArr;</a></span>
+              <span class="badge bg-primary"><a  style="color:white;" href="#" @click="showSources(false)" >&uArr;</a></span>
+              <table v-if="isVisibleSources">
+                  <tr v-for="sour in contextSources">
+                      <td>{{sour.name}}</td>
+                      <td>{{sour.location}}</td>
+                      <td>{{sour.type}}</td>
+                      <td><button class="btn btn-danger btn-sm"  @click="removeSource(sour)">X</button></td>
+                  </tr>
+              </table>
+          </div>
+
+        <div  class="animated kprime-panel slideInLeft" >
+            <h4>Terms {{terms.length}}
+                <button class="btn btn-success btn-sm" data-toggle="modal" @click="editTerm(Term())" data-target="#termAddModal" >+</button>
+                <button type="button" class="btn btn-primary btn-sm" alt="Transformers"> <a style="color:white" href="/transformers.html"><img  width="30px" alt="transformers" src="/img/transformer.png"></a>  </button>
+                <button type="button" class="btn btn-primary btn-sm" alt="Experts"> <a style="color:white" href="/experts.html"><img  width="30px" alt="experts" src="/img/network.png"></a>  </button> :
+                <div>
+                    <button v-if="termsInfo.prevDb===''" disabled class="btn btn-secondary btn-sm" alt="Previous"  title="Previous" >&#9111;</button>
+                    <button v-else class="btn btn-success btn-sm" alt="Previous"  title="Previous" @click="clickOnPrevDatabase(termsInfo.prevDb)">&#9111;</button>
+                    <label>{{currentDatabase}}</label>
+                    <button v-if="termsInfo.nextDb===''" disabled class="btn btn-secondary btn-sm" alt="Next"  title="Next" >&#9112;</button>
+                    <button v-else class="btn btn-success btn-sm" alt="Next"  title="Next"  @click="clickOnNextDatabase(termsInfo.nextDb)">&#9112;</button>
+                    <label> : {{termsInfo.lastUpdate}}</label>
+                </div>
+                <input v-focus id="cmd" v-model="command" type="text"
+                       @keydown.alt.g.prevent="gotoGoals"
+                       @keydown.alt.s.prevent="gotoStories"
+                       @keydown.alt.c.prevent="gotoContexts"
+                       @keyup.enter="keyUpCommand" class="form-control">
+                <label v-for="option in expertOptions" class="badge bg-primary"><a style="color:white;" href="#"  @click="appendCommandLabel(option)">{{option}}</a>&nbsp;</label>
+            </h4>
+
+            <div v-if="hasCommandResult">
+                <div v-if="spinning" class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div v-if="commandFailure" class="alert alert-danger" role="alert">
+                    <label>Command Result:</label>
+                    <pre v-if="commandFailure">{{commandFailure}}</pre>
+                </div>
+                <div v-if="commandResult" class="alert alert-success" role="alert">
+                    <label>Command Result:</label>
+                    <div v-if="commandResult" v-html="commandResult"></div>
+                </div>
+            </div>
+
+            <span class="badge bg-primary"><a  style="color:white;" href="#" @click="filterWithLabel('ALL')" >ALL</a></span>
+            <span class="badge bg-primary"><a  style="color:white;" href="#" @click="filterWithLabel('')" >NONE</a></span>
+            <span v-for="label in labelFilters"  class="badge bg-primary"><a style="color:white;" href="#"  @click="filterWithLabel(label)">{{label}}</a></span>
+            <hr>
+            <table class="table-result card-terms">
+                <tr>
+                    <th>term : type</th>
+                    <th>description</th>
+                    <th>actions</th>
+                </tr>
+                <tr v-for="term in termsFilteredByName">
+                    <td  class="term" >
+                        <div v-if="isColumn(term.name)" key="column">
+                            {{term.name}} {{term.type}}  {{term.category}}
+                        </div>
+                        <div v-else key="table">
+                            {{term.category}} <a v-on:click="setFilter(term.name)"><img alt="columns" width="30px" src="/img/list-text.png"></a>{{term.name}} : <a v-bind:href="term.typeExpanded">{{term.type}}</a><br>
+                        </div>
+                        <span style="font-variant-position: sub;"><a v-bind:href="term.url">{{term.url}}</a></span>
+                    </td>
+                    <td>{{term.description}}
+                        <div><span  style="font-variant-position: sub;" >{{term.relation}}</span></div>
+                        <div v-for="label in term.labels.split(',')"><span  style="font-variant-position: sub;" >{{label}}</span></div>
+                        <!--<div v-if="term.labels" key="labels"><span style="font-variant-position: sub;">{{term.labels}}</span></div>-->
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @click="editTerm(term)" data-toggle="modal" data-target="#termModal" ><img class="icon_edit" src="img/editw.png"></button>
+<!--                        <a class="btn btn-success"  target="_blank" v-bind:href="'/dictionary/'+currentTrace+'/'+currentDatabase+'/'+term.name" >Page</a>-->
+                        <a class="btn btn-primary"  target="_blank" v-bind:href="'/project/'+currentProject+'/dictionary/'+currentTrace+'/'+currentDatabase+'/'+term.gid" >Page</a>
+                        <button class="btn btn-danger" @click="removeTerm(term)">X</button>
+                        <div v-if="isTable(term.category)">
+                            <hr>
+                            <a class="btn btn-outline-primary btn-sm"  target="_blank" v-bind:href="'/project/'+currentProject+'/data/'+currentTrace+'/'+currentDatabase+'/'+term.name">Json</a>
+                            <a class="btn btn-outline-primary btn-sm"  target="_blank" v-bind:href="'/project/'+currentProject+'/ldata/'+currentTrace+'/'+currentDatabase+'/'+term.name">JsonLD</a>
+                            <a class="btn btn-outline-primary btn-sm disabled"  target="_blank" v-bind:href="'/provdata/'+currentTrace+'/'+currentDatabase+'/'+term.name">ProvLD</a>
+                            <a class="btn btn-outline-primary btn-sm"  target="_blank" v-bind:href="'/context/'+currentProject+'/chart/focus/'+currentTrace+'/'+currentDatabase+'/'+term.name">Chart</a>
+                            <a class="btn btn-outline-primary btn-sm"  target="_blank" v-bind:href="'/context/'+currentProject+'/table/'+currentTrace+'/'+currentDatabase+'/'+term.name">Table</a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+
+  </div>
+
+        <div class="alert alert-info animated" v-bind:class="{ fadeIn: notHasTerms, fadeOut: hasTerms }" role="alert">
+            <p>A dictionary is a collection of terms. Start adding one term or import from source.</p>
+        </div>
+
+        <div id="termModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Term: {{editingTerm.name}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                        <tr>
+                            <td><label>Type:</label></td>
+                            <td><input v-model="editingTerm.type"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Description:</label></td>
+                            <td><textarea v-model="editingTerm.description"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><label>URL:</label></td>
+                            <td><textarea v-model="editingTerm.url"></textarea></td>
+                        </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="editSaveTerm()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="termAddModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Term</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div v-if="errorTermMessage" class="alert alert-danger" role="alert">
+                        <p>{{errorTermMessage}}</p>
+                    </div>
+
+                    <div v-if="successTermMessage" class="alert alert-success" role="alert">
+                        <p>{{successTermMessage}}</p>
+                    </div>
+
+                    <table>
+                        <tr>
+                            <td><label>Term:</label></td>
+                            <td><input v-model="editingTerm.name"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Type:</label></td>
+                            <td><input v-model="editingTerm.type"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Description:</label></td>
+                            <td><textarea v-model="editingTerm.description"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><label>URL:</label></td>
+                            <td><textarea v-model="editingTerm.url"></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" @click="addTerm()" class="btn btn-success">Add new</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div id="vocabularyModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Vocabulary: {{editingVocabulary.namespace}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr><td>Prefix:</td><td><input v-model="editingVocabulary.prefix"></td></tr>
+                            <tr><td>Namespace:</td><td><input v-model="editingVocabulary.namespace"></td></tr>
+                            <tr><td>Reference:</td><td><input v-model="editingVocabulary.reference"></td></tr>
+                            <tr><td>Description:</td><td><input v-model="editingVocabulary.description"></td></tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="addVocabulary()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sourceModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Source: {{editingSource.namespace}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr><td>Type:</td><td><input v-model="editingSource.type"></td></tr>
+                            <tr><td>Name:</td><td><input v-model="editingSource.name"></td></tr>
+                            <tr><td>Driver:</td><td><input v-model="editingSource.driver"></td></tr>
+                            <tr><td>Location:</td><td><input v-model="editingSource.location"></td></tr>
+                            <tr><td>User:</td><td><input v-model="editingSource.user"></td></tr>
+                            <tr><td>Password:</td><td><input v-model="editingSource.password"></td></tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="addSource()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script  type="module" src="dictionary.js"></script>
+
+</body>
+</html>

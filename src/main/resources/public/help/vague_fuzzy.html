@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPrime Help: null</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link href="../css/remark.css" rel="stylesheet">
+</head>
+<body>
+<textarea id="source">
+
+# Null
+
+• It is possible for tuples to have a null value, denoted by null, for some of their attributes.
+• null signifies an unknown value or that a value does not exist.
+• The result of any arithmetic expression involving null is null.
+• Aggregate functions simply ignore null values (as in SQL).
+• For duplicate elimination and grouping, null is treated like any other value, and two nulls are assumed to be the same (as in SQL).
+• Comparisons with null values return the special truth value: unknown
+– If false was used instead of unknown, then not (A < 5) would not be equivalent to A >= 5
+• Three-valued logic using the truth value unknown:
+– OR:
+    (unknown or true) = true,
+    (unknown or false) = unknown
+    (unknown or unknown) = unknown
+– AND:
+    (true and unknown) = unknown,
+    (false and unknown) = false,
+    (unknown and unknown) = unknown
+– NOT:
+    (not unknown) = unknown
+– In SQL “P is unknown” evaluates to true if predicate P evaluates to unknown
+• Result of select predicate is treated as false if it evaluates to unknown
+---
+
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        //     {left: "$$", right: "$$", display: true},
+        //     {left: "$", right: "$", display: false},
+        //     {left: "\\[", right: "\\]", display: true},
+        //     {left: "\\(", right: "\\)", display: false},
+        // ]});
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="/js/jquery.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="/js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+
+</head>
+<body class="bg-goal">
+<h1><a href="/"><img class="logo" src="/img/kprime-logo-bw.png"></a> ${projectName} ${todo.title}</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">KPrime</li>
+        <li class="breadcrumb-item active">Todo</li>
+    </ol>
+</nav>
+
+<div id="content" class="todo-panel">
+    <h3>${todo.title}</h3>
+    <hr>
+    <p>priority: ${todo.priority}</p>
+    <p>estimate: ${todo.estimate}</p>
+    <hr>
+    <a class="btn btn-primary btn-sm"  target="_blank" href="/project/${projectName}/cases">Diagram</a>
+    <a class="btn btn-outline-secondary btn-sm"  target="_blank" href="#">Story</a>
+
+</div>
+
+</body>
+</html>

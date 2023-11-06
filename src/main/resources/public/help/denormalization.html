@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPrime Help: normalization</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link href="../css/remark.css" rel="stylesheet">
+</head>
+<body>
+<textarea id="source">
+
+# Denormalization
+
+Dimensional models use a process called denormalization, where you include redundant copies of the data in multiple tables.
+This reduces the number of tables. When you query the database, it does not need to join as many tables together, so querying is much faster.
+Less joining also reduces complexity for end-users creating reports.
+However, it means that the redundant copies of data must be kept in sync to ensure integrity, and that requires careful maintenance.
+The redundant data also uses more storage, which may increase costs slightly.
+
+
+Dimensional models use facts and dimensions:
+
+## Facts
+
+Facts, in this context, are pieces of data, typically numeric values, used to measure something, such as sales, orders, or revenue.
+Facts can be aggregated or summarized for performance reasons, such as calculating averages or counting records,
+so that these values are already calculated and don’t have to be calculated as part of running the query.
+
+## Dimensions
+
+Dimensions describe data’s characteristics, such as time, product, customer, or location.
+They are typically represented as hierarchies, with each level of the hierarchy providing a more detailed description of the data.
+
+Another way to understand it is that fact tables contain metrics, while dimension tables contain attributes of the metrics in the fact tables.
+
+
+Instead of the natural keys used in relational modeling, dimensional modeling uses surrogate keys:
+artificial values created specifically (and usually automatically) to serve as the primary key for a table.
+
+
+## Tracking Changes
+
+To track changes made to a table in dimensional modeling, you’ll use slowly changing dimensions (SCDs), of which there are three types:
+
+**Type 1**
+
+Type 1 SCDs overwrite existing data with the new data and discard the old data.
+This is the simplest and most common type of SCD, and it is often used when the changes to the data
+are not significant or when the old data is no longer needed, such as when correcting a customer’s phone number.
+
+**Type 2**
+
+Type 2 SCDs maintain multiple versions of the data: the new data and a record of the old data.
+Use this type of SCD when you need to track the changes to the data over time and maintain a record of the old data.
+For example, let’s say that six months ago, a company analyzed its sales data and found New York to be its top-selling state.
+Now, if some customers have since moved out of New York to New Jersey,
+rerunning the same report without accounting for these changes would show inaccurately lower sales figures for New York.
+This would lead to a mistaken perception of historical data showing declining sales in New York,
+which could influence strategic decisions.
+So, if a customer moves from one US state to another, the company’s Type 2 SCD would store both the old state and the new one.
+
+**Type 3**
+
+Type 3 SCDs create a new record for each change, so you can maintain a complete history of the data.
+This type of SCD is the most complex but also the most flexible.
+For example, with a customer who moves from one US state to another, a Type 3 SCD would store the entire old record
+and an entire new record, which could include dozens of fields, and not just the US state field.
+
+One key difference between history tables and SCDs is their level of detail.
+History tables track changes to the data at the level of individual records, while SCDs track changes at the dimension level.
+And while history tables are typically used to track changes to any type of data,
+SCDs are specifically for tracking changes to dimension tables in a dimensional model.
+
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        //     {left: "$$", right: "$$", display: true},
+        //     {left: "$", right: "$", display: false},
+        //     {left: "\\[", right: "\\]", display: true},
+        //     {left: "\\(", right: "\\)", display: false},
+        // ]});
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

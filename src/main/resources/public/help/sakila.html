@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPrime Help: index</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link href="../css/remark.css" rel="stylesheet">
+</head>
+<body>
+<textarea id="source">
+
+# Sakila Use Case
+
+* Context
+* Goals
+* Sources
+* Decompose and Integrate
+* First Model and VUCA
+* Iteration
+* Conclusion
+
+---
+## Sakila Context
+
+Sakila is a small firm, with fifteen emploies. It's business is on CD, DVD rentals.
+It has three branches. One centralized computer system for inventary and income control.
+
+Unfortunately the market of CD and DVD rental has shrinken and they have decided to restart, and
+renew the core business model to allign with the current market needs.
+
+---
+### Sakila Goals
+
+* Pivoting from DVD rental to Event organizer for Film Club associates.
+* No more warehouse, but keep branches to do the best point as social meeting point.
+* They will partner with an online movie rental service.
+
+
+---
+### Sakila Technical Goals
+
+* Have a new web interface for associates, not only for sakila staff.
+* Cut old inventory stuff.
+* Integrate partner inventory.
+* Integrate a social meeting platform.
+* Mantain the current view from branches.
+
+[Technical Goals](http://51.77.141.5:7000/todos.html)
+
+---
+### Sakila Sources
+* Current monolith DB to evolve. (PostgreSQL)
+* New partner inventory DB to integrate. (batch CSV)
+
+---
+### Current Model
+<img width="700px" src="../img/sakila.png">
+[Computed](http://51.77.141.5:7000/chart/sakila528574178/sakila5285_487000000_tracedb.xml)
+
+---
+### Sakila Current Core Source Usage
+* CRUD movie
+* CRUD customer[Mary]( http://localhost:7000/data/sakila/sakila1588406044610/sakila1588406044610_db.xml/customer?first_name='MARY' )
+* CRUD buy/rental
+* Compute income per branch
+* Compute gross and net income
+
+---
+### Sakila New Core Source Usage
+* CRUD associate : [Mary](http://localhost:7000/ldata/sakila/sakila1588406044610/sakila1588406044610_db.xml/customer?first_name='MARY' )
+* CRUD meeting : [Event.rdf](https://schema.org/Event) [story]
+* Compute income per branch [story]
+* Compute gross and net income [story]
+
+---
+### Current Query: total income
+
+    SELECT payment_date, amount, sum(amount) OVER (ORDER BY payment_date)
+    FROM (
+      SELECT CAST(payment_date AS DATE) AS payment_date, SUM(amount) AS amount
+      FROM payment
+      GROUP BY CAST(payment_date AS DATE)
+    ) p
+    ORDER BY payment_date;
+
+[Computed](http://localhost:7000/traceplay/sakila528574178/Story_q1.md)
+
+---
+### Current VUCA
+* Volatility, zero changes, stable since years.
+* Uncertaninty, low, almost zero, old terminology is in use since years.
+* Complexity, adeguate for a small business.
+* Ambiguity, medium, the old conceptual model is lost, but the DB is alligned in bussness terminology and query. Tables are normalized in good shape.
+
+---
+### Iteration 1
+* Buss Query1: Inventory switch.
+    * Search once a day per customer.
+    * Load batch once a day.
+* Current infrastructure could support this.
+
+---
+### First Model
+
+---
+### Iteration 1 Activities
+* Definition of terms.
+* Normalization.
+* Add functional dependency and other constraints.
+* Data integration.
+* Data clean up.
+* Allign to new terminology and queries.
+
+---
+### First VUCA
+* Volatility, a lot of changes.
+* Uncertaninty, a lot attributes and definitions are empty.
+* Complexity, delegatin inventory complexity is reduced.
+* Ambiguity, a lot, the old conceptual model is lost.
+
+
+---
+## Conclusions
+
+    [Gantt Timeline]
+
+    [Last VUCA]
+
+
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        //     {left: "$$", right: "$$", display: true},
+        //     {left: "$", right: "$", display: false},
+        //     {left: "\\[", right: "\\]", display: true},
+        //     {left: "\\(", right: "\\)", display: false},
+        // ]});
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

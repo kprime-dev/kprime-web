@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KPrime Help: relational algebra</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+    <link href="../css/remark.css" rel="stylesheet">
+</head>
+<body>
+<textarea id="source">
+
+# Operators
+
+    P Projection ∏
+    S Selection σ
+    X Product x
+    U Union ∪
+    D Difference -
+    R Rename ρ
+
+The operators take one or two relations as inputs and produce a new relation as a result.
+
+---
+
+## Projection
+
+• Notation: P[A1,..Ak](r)
+where A1, A2 are attribute names and r is a relation name.
+• The result is defined as the relation of k columns obtained by erasing the columns that are not listed
+• Duplicate rows removed from result, since relations are sets
+• Example: To eliminate the dept_name attribute of instructor
+P[ID, name, salary](instructor)
+
+---
+
+## Selection
+
+• Notation: S[p](r)
+• p is called the selection predicate
+• Defined as:
+σp(r) = {t | t ∈ r and p(t)}
+Where p is a formula in propositional calculus consisting of terms
+connected by : ∧ (and), ∨ (or), ¬ (not)
+Each term is one of:
+<attribute>op <attribute> or <constant>
+where op is one of: =, ≠, >, ≥. <. ≤
+• Example of selection:
+S(dept_name=“Physics”)instructor
+
+---
+
+## Product
+
+Notation r x s P(r,s)
+• Defined as:
+r x s = {t q | t ∈ r and q ∈ s}
+• Assume that attributes of r(R) and s(S) are disjoint. (That is, R ∩ S = ∅).
+• If attributes of r(R) and s(S) are not disjoint, then renaming must be used.
+
+---
+
+## Union
+
+• Notation: r ∪ s  U(r,s)
+• Defined as:
+r ∪ s = {t | t ∈ r or t ∈ s}
+• For r ∪ s to be valid.
+1. r, s must have the same arity (same number of
+attributes)
+2. The attribute domains must be compatible (example: 2nd
+column of r deals with the same type of values as does the
+2nd column of s)
+• Example: to find all courses taught in the Fall 2009
+semester, or in the Spring 2010 semester, or in both
+    U(
+    P[course_id](S[semester=“Fall” and year=2009](section)),
+    P[course_id](S[semester=“Spring” and year=2010](section))
+    )
+
+---
+
+## Difference
+
+• Notation r – s D(r,s)
+• Defined as:
+r – s = {t | t ∈ r and t ∉ s}
+• Set differences must be taken between compatible relations.
+– r and s must have the same arity
+– attribute domains of r and s must be compatible
+• Example: to find all courses taught in the Fall 2009 semester, but not
+in the Spring 2010 semester
+    D(
+    P[course_id](S[semester=“Fall” and year=2009](section)),
+    P[course_id](S[semester=“Spring” and year=2010](section))
+    )
+
+---
+
+## Rename
+
+Allows us to name, and therefore to refer to, the results of relational-algebra expressions.
+• Allows us to refer to a relation by more than one name.
+• Example: ρ x (E)  R[x/y](E)
+returns the expression E under the name X
+• If a relational-algebra expression E has arity n, then
+returns the result of expression E under the name X, and
+with the attributes renamed to A1 , A2 , ...., An .
+
+La ridenominazione permette di eseguire il join di una relazione con se stessa (“self-join”).
+
+---
+
+# Additional Shortcut Operators
+
+    I Intersection
+    N Natural Join
+    T Theta Join
+    O Outer Join
+    A Assignment
+    Y Division
+
+---
+
+## Intersection
+
+• Notation: r ∩ s
+• Defined as:
+• r ∩ s = { t | t ∈ r and t ∈ s }
+• Assume:
+– r, s have the same arity
+– attributes of r and s are compatible
+• Note: r ∩ s = r – (r – s)
+
+---
+
+## Natural Join
+
+Let r and s be relations on schemas R and S respectively.
+Then, N(r,s) is a relation on schema R ∪ S obtained as
+follows:
+– Consider each pair of tuples tr from r and ts from s.
+– If tr and ts have the same value on each of the attributes in R ∩ S,
+add a tuple t to the result, where
+• t has the same value as tr on r
+• t has the same value as ts on s
+
+---
+
+## Theta Join
+
+è la combinazione di prodotto Cartesiano e selezione:
+     σθ (r x s)
+
+Così come è stato definito, il theta-join richiede in ingresso relazioni con schemi disgiunti.
+per garantire l’univocità (distinguibilità) degli attributi nello schema risultato è necessario adottare “dei trucchi”
+    (ad es. usare il nome della relazione; DB2 usa un suffisso numerico: 1, 2, ecc.)
+
+Se F è una congiunzione di uguaglianze, si parla più propriamente di equi-join.
+
+
+---
+
+## Outer Join
+
+• An extension of the join operation that avoids loss of information.
+• Computes the join and then adds tuples form one relation that does not match tuples in the other relation to the result of the join.
+• Uses null values:
+– null signifies that the value is unknown or does not exist
+– All comparisons involving null are (roughly speaking) false by definition.
+
+(r N s) U (r – ∏R(r N s) x {(null, ..., null)}
+
+Esistono tre varianti:
+OLeft (=O): solo tuple dell’operando sinistro sono riempite con NULL
+ORight (O=): idem per l’operando destro
+OFull (=O=): si riempiono con NULL le tuple dangling di entrambi gli operandi
+---
+
+## Assignment
+
+The assignment operation (←) provides a convenient way to express complex queries.
+* Write query as a sequential program consisting of
+    • a series of assignments
+    • followed by an expression whose value is displayed as a result of the query.
+* Assignment must always be made to a temporary relation variable.
+
+---
+## Division
+
+Simbolo ÷ Y
+! R(Z) ÷ S(X)
+! Ha significato solo se
+! Y = Z – X
+! Restituisce tuple t = tR [Y] per le quali tR [X] = tS per ogni tupla tS di S
+! mostra le tuple t che compaiono in R combinate con tutte le tuple di S
+
+T1 ← πY R( )
+T2 ← πY S × T1( ) − R( )
+T ← T1 − T 2
+---
+
+# Extended Relational Algebra
+
+Proiezione Generalizzata:
+* La lista degli attributi di proiezione contiene funzioni degli attributi della relazione
+
+Funzioni di aggregazione e raggruppamento:
+* SUM, AVERAGE, MAXIMUM, MINIMUM, COUNT
+* Raggruppamento delle tuple in base ai valori di un insieme di attributi
+---
+
+# Multiset Relational Algebra
+
+• Pure relational algebra removes all duplicates
+– e.g. after projection
+• Multiset relational algebra retains duplicates, to match SQL semantics
+– SQL duplicate retention was initially for efficiency, but is now a feature
+• Multiset relational algebra defined as follows
+– selection: has as many duplicates of a tuple as in the input, if the tuple satisfies the selection
+– projection: one tuple per input tuple, even if it is a duplicate
+– cross product: If there are m copies of t1 in r, and n copies of t2 in s, there are m x n copies of t1.t2 in r x s
+– Other operators similarly defined
+• E.g.
+    union: m + n copies,
+    intersection: min(m, n) copies
+    difference: min(0, m – n) copies
+
+---
+# Tools
+
+https://dbis-uibk.github.io/relax/landing
+https://dbis-uibk.github.io/relax/help#tutorial-user
+https://github.com/dbis-uibk/relax
+
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<script type="text/javascript">
+      var options = {};
+      var renderMath = function() {
+        renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        // renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+        //     {left: "$$", right: "$$", display: true},
+        //     {left: "$", right: "$", display: false},
+        //     {left: "\\[", right: "\\]", display: true},
+        //     {left: "\\(", right: "\\)", display: false},
+        // ]});
+      }
+      var slideshow = remark.create(options, renderMath);
+
+    </script>
+</body>
+</html>

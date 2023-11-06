@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KP Chart Dictionary</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script src="/js/jquery.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="/js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/animate.css">
+    <!--<link rel="stylesheet" href="/css/kprime.css">-->
+    <style>
+    .labelled > rect{
+        fill:#FF0000;
+        stroke:#FFFF00;
+        stroke-width:4px;
+    }
+    </style>
+
+</head>
+<body class="executive">
+<h1><a href="/"><img class="logo" width="100px" src="/img/kprime-logo-bw.png"></a> Dictionary  {{project.name}}</h1>
+<!--
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" >Home</a></li>
+        <li class="breadcrumb-item active"><a href="/dictionary.html" >Dictionary {{label}}</a></li>
+    </ol>
+</nav>
+-->
+<div class="kprime-panel">
+{{labelFilterUrls}}
+{{traces}}
+</div>
+<!--
+<div >
+<label for="rangeHeight">Width</label><input type="range" max="1000" class="custom-range" id="rangeWidth">
+<label for="rangeHeight">Height</label><input type="range" max="1000" class="custom-range" id="rangeHeight">
+</div>
+-->
+{{markdownDiv}}
+<!--
+    <div class="mermaid animated bounceInRight kprime-white-panel shadow">
+    {{markdownDiag}}
+    </div>
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<!--
+<script src="https://unpkg.com/mermaid@8.9.0/dist/mermaid.min.js"></script>
+<script src="https://unpkg.com/mermaid@8.7.0/dist/mermaid.min.js"></script>
+<script src="https://unpkg.com/mermaid@8.4.8/dist/mermaid.min.js"></script>
+-->
+<script>
+    var callback = function(){
+	alert('A callback was triggered');
+    }
+
+    var config = {
+      startOnLoad:true,
+      flowchart:{
+        useMaxWidth:false,
+        htmlLabels:true,
+        curve:'cardinal',
+      },
+      securityLevel:'loose',
+      'theme': 'base',
+      'themeVariables': {
+        'primaryBorderColor': '#674ea7',
+      }
+    };
+
+    mermaid.initialize(config);
+  </script>
+<script>
+    $(document).ready(function(){
+      $('[id="rangeWidth"]').change(function(){
+        var newval=$(this).val();
+        //$("#slidernumber").text(newval);
+        console.log(newval);
+        console.log($('svg[id^="mermaid"]').width());
+        $('svg[id^="mermaid"]').width(newval*10);
+      });
+      $('[id="rangeHeight"]').change(function(){
+        var newval=$(this).val();
+        //$("#slidernumber").text(newval);
+        console.log(newval);
+        console.log($('svg[id^="mermaid"]').height());
+        $('svg[id^="mermaid"]').height(newval*10);
+      });
+    });
+</script>
+</body>
+</html>

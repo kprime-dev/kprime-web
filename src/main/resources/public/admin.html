@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KP Contexts</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resources.js"></script>
+    <script defer src="js/fontawesome.js"></script>
+
+    <script src="js/jquery.js" ></script>
+    <script src="js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="js/bootstrap.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+</head>
+<body>
+
+    <audio id="clickAudio">
+        <source src="/audio/rclick.mpeg" type="audio/mpeg">
+    </audio>
+    <audio id="triggerAudio">
+        <source src="/audio/trigger.ogg" type="audio/ogg">
+        <source src="/audio/trigger.mpeg" type="audio/mpeg">
+    </audio>
+
+    <div class="btn-group" style="width:100%;">
+        <div class="btn-group" style="width:100%;">
+            <button type="button" class="btn btn-secondary"> <a style="color:white" href="/"><img class="logo" height="30px" src="img/kprime-logo-bw.png"></a></button>
+            <button type="button" class="btn btn-secondary disabled"> <img alt="context" width="30px" src="/img/context-icon.png"> </button>
+            <button type="button" class="btn btn-secondary"> <a style="color:white" href="/todos.html"><img alt="home" width="30px" src="/img/todo-ok.png"></a></button>
+            <button type="button" class="btn btn-secondary"> <a style="color:white" href="/noteedit.html"><img alt="home" width="30px" src="/img/obiettivo.png"></a> </button>
+            <button type="button" class="btn btn-secondary"> <a style="color:white" href="/dictionary.html"><img alt="home" width="30px" src="/img/linked-data.png"></a> </button>
+            <button type="button" class="btn btn-secondary"> <a style="color:white;white-space: nowrap;" target="help" href="/help/methodology.html#1"><img alt="help" width="30px" src="/img/help.png"></a> </button>
+            <button type="button" class="btn btn-secondary"> <a style="color:white;white-space: nowrap;" href="/project/hierarchy" > Hierarchies <img src="/img/cases_w.png"  height="30px"></a></button>
+            <button type="button" class="btn btn-secondary"> <a style="color:white;white-space: nowrap;" href="/project/circlemap"> Circles <img src="/img/cases_w.png"  height="30px"></a></button>
+            <button type="button" class="btn btn-secondary"> <a style="color:white;white-space: nowrap;" href="/project/forcetree"> Tree <img src="/img/cases_w.png"  height="30px"></a></button>
+            <div class="btn btn-secondary" style="width:100%;"></div>
+        </div>
+    </div>
+
+
+    <div id="app-admin">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                {{currentProject}}
+            </li>
+        </ol>
+
+        <div class="alert alert-info" role="alert">
+            <p>Contexts are per server, each KPrime user shares the same set of contexts.</p>
+        </div>
+
+        <div v-if="errorMessage" class="alert alert-danger" role="alert">
+            <p>{{errorMessage}}</p>
+        </div>
+
+        <div v-if="successMessage" class="alert alert-success" role="alert">
+            <p>{{successMessage}}</p>
+        </div>
+
+        <div class="container kprime-panel">
+        <table>
+            <tr>
+                <p>Working dir is where KPrime will write and read data specific per single context.</p>
+            </tr>
+            <tr>
+                <td>
+                    <h2>{{settings.projectName}}</h2> work dir:
+                </td>
+                <td>
+                    <input v-focus v-model="settings.workingDir"
+                           @keydown.alt.t.prevent="gotoTerms"
+                           @keydown.alt.g.prevent="gotoGoals"
+                           @keydown.alt.s.prevent="gotoStories"
+                           @keyup.enter="saveWorkingDir">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <hr>
+
+    <div class="container-fluid animated slideInLeft">
+            <div>
+                <span class="badge bg-primary"><a  style="color:white;" href="#"  @click="filterProjects('')">ALL</a></span>
+                <span v-for="label in labelFilters"  class="badge bg-primary"><a style="color:white;" href="#" @click="filterProjects(label)">{{label}}</a></span>
+            </div>
+            <div class="row">
+                <div v-for="project in projectFiltered" class="col-sm">
+
+                    <div class="card" > <!-- v-bind:class="{ card-selected: isCardSelected(project) }" -->
+                        <img v-bind:src="project.picUrl" class="card-img-top card-img-index" alt="..."> <!--img/project.png-->
+                        <div class="card-body card-contexts"> <!--card-img-overlay-->
+                            <h5 class="card-title">{{ project.name }}</h5>
+                            <span v-for="label in project.labels.split(',')"  style="color:white" class="badge bg-primary">{{label}}</span>
+                            <p class="card-text">{{project.location}}</p>
+                            <button class="btn btn-sm btn-primary" ><a style="color:white" v-bind:href="'/project/'+project.name">Browse</a></button>
+                            <button class="btn btn-sm btn-primary" @click="selectProject(project)">Select</button>
+                            <button class="btn btn-sm btn-primary"  @click="editProject(project)" data-toggle="modal" data-target="#editProjectModal">Edit</button>
+                            <button class="btn btn-sm btn-danger" @click="removeProject(project)">X</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    <div id="editProjectModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Name: {{editingProject.name}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 class="modal-title">GID: {{editingProject.gid}}</h5>
+                        <p>Name:</p>
+                        <input v-model="editingProject.name">
+                        <p>Location:</p>
+                        <input v-model="editingProject.location">
+                        <p>Description:</p>
+                        <input v-model="editingProject.description">
+                        <p>Pic URL:</p>
+                        <input  v-model="editingProject.picUrl">
+                        <p>Labels:</p>
+                        <input  v-model="editingProject.labels">
+                        <p>Part Of:</p>
+                        <input  v-model="editingProject.partOf">
+                        <p>License:</p>
+                        <input  v-model="editingProject.license">
+                        <p>License URL:</p>
+                        <input  v-model="editingProject.licenseUrl">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="editSaveProject()" class="btn btn-success">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div> <!-- app -->
+
+    <script src="admin.js"></script>
+
+</body>
+</html>

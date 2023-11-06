@@ -1,0 +1,124 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Jura', sans-serif;
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding: 0 0 40px;
+    color: #333;
+    background: #eee;
+    /*
+    background: #d9d9d9;
+    background: #FDE3A7; /*CAPE HONEY*/
+    */
+
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Alegreya Sans SC', sans-serif;
+    font-weight: 300;
+    color: #444;
+}
+
+h1 {
+   color: #a00;
+}
+h2 {
+   color: #00e;
+}
+
+a {
+    color: #070;
+}
+
+/* CODE */
+
+.remark-code,
+.remark-inline-code {
+  font-weight: normal;
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+}
+
+.remark-inline-code {
+  background-color: var(--nord6);
+  padding: 0.2em 0.4em;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  transition: background-color 400ms ease-in-out 0s;
+  font: 300 0.92em/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif,
+    WenQuanYi Micro Hei, sans;
+}
+
+
+/* TABLES */
+
+.st {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+.st table {
+  margin-bottom: 0px;
+  width: 100%;
+  max-width: 100%;
+  border-spacing: 0;
+}
+
+.st table thead th {
+  color: #000;
+}
+
+.st table td,
+.st table th,
+.st table thead,
+.st table thead th,
+.st table tr {
+  border-width: 0px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+}
+
+.st-allline table td:first-child,
+.st-allline table th:first-child,
+.st-vline table td:first-child,
+.st-vline table th:first-child {
+  border-left: 0;
+}
+
+.st-hline table thead th,
+.st-hline table thead th,
+.st-hline table tbody tr:not(:last-child) td,
+.st-hline table tbody tr:not(:last-child) td,
+.st-vline table tr:nth-last-child(2) th,
+.st-vline table thead tr:last-child th,
+.st-allline table tbody tr:not(:last-child) td,
+.st-allline table thead th {
+  border-bottom-width: 1px;
+}
+
+.st-allline table td,
+.st-allline table thead th,
+.st-allline table th,
+.st-vline table td,
+.st-vline table thead th,
+.st-vline table th {
+  border-left-width: 1px;
+}
+
+.st.noborder {
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 0px;
+}
+
+.st.noborder table thead th {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.6);
+  border-bottom-width: 2px;
+}

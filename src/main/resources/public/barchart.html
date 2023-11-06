@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KPrime</title>
+    <link rel="icon" href="/img/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/js/vue.js"></script>
+    <script src="/js/vue-resources.js"></script>
+    <script defer src="/js/fontawesome.js"></script>
+
+    <script src="/js/jquery.js" ></script>
+    <script src="/js/jpopper.js" ></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <script src="/js/bootstrap.js"></script>
+
+    <script>
+        var barChartUrl = "{{barChartUrl}}";
+    </script>
+
+    <script src="/js/chart.min.js"></script>
+    <script src="/js/chart.utils.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Jura:500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/kprime.css">
+    <style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
+
+
+</head>
+
+<body class="executive">
+    <h1><a href="/"><img class="logo" src="/img/kprime-logo-bw.png"></a> Changes</h1>
+    <div id="app-barchart" class="animated bounceInRight kprime-panel shadow">
+
+        <div style="width: 75%">
+            <canvas id="canvas"></canvas>
+        </div>
+<!--        <button @click="vueScalingFactor" id="randomizeData">Read Data</button>-->
+    </div>
+
+    <script src="/barchart.js" ></script>
+
+</body>
+
+</html>
