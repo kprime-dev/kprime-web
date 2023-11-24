@@ -1,3 +1,6 @@
+# Reader Explore Journey
+
+```mermaid
 journey
     title Reader Explore Journey
     section Go to contexts
@@ -8,3 +11,4 @@ journey
     section Go home
       Go downstairs: 5: Me
       Sit down: 5: Me
+```
