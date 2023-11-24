@@ -139,11 +139,11 @@ How to build and run the server with options and configuration to start writing 
 
 The User Manual
 
-[ELEMENTS USAGE](doc/use/elements/index.md)
-[PAGES USAGE](doc/use/pages/index.md)
-[CASESTUDIES USAGE](doc/use/index.md)
-[COMMANDS USAGE](doc/use/usage.md)
-[EXPERTS USAGE](doc/use/index.md)
+- [ELEMENTS USAGE](doc/use/elements/index.md)
+- [PAGES USAGE](doc/use/pages/index.md)
+- [CASESTUDIES USAGE](doc/use/index.md)
+- [COMMANDS USAGE](doc/use/usage.md)
+- [EXPERTS USAGE](doc/use/index.md)
 
 The Command Reference manual
 
