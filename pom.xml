@@ -9,8 +9,7 @@
     <artifactId>kprime-webapp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
-    <name>KPrime</name>
+    <name>kprime-webapp</name>
     <description>Ubiquitous Language Editor</description>
     <url>https://kprime.it/</url>
     <inceptionYear>2020</inceptionYear>
@@ -61,7 +60,7 @@
 
         <junit.version>4.13.1</junit.version>
         <archunit.version>1.0.1</archunit.version>
-        <jackson.version>2.12.2</jackson.version>
+        <jackson.version>2.15.2</jackson.version>
         <jackson.databind.version>2.12.7.1</jackson.databind.version>
         <jackson.kotlin.version>2.12.2</jackson.kotlin.version>
         <jackson.jsr310.version>2.12.2</jackson.jsr310.version>
@@ -72,7 +71,6 @@
         <woodstox.version>5.4.0</woodstox.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <commons.csv.version>1.8</commons.csv.version>
-        <lucene.version.old>8.11.2</lucene.version.old>
         <lucene.version>9.2.0</lucene.version>
         <prov.version>1.0.0</prov.version>
         <slf4j.version>1.7.32</slf4j.version>
@@ -139,6 +137,13 @@
             <artifactId>postgresql</artifactId>
             <version>42.5.4</version>
         </dependency>
+        <!-- 60M -->
+        <dependency>
+            <groupId>org.duckdb</groupId>
+            <artifactId>duckdb_jdbc</artifactId>
+            <version>0.9.2</version>
+        </dependency>
+
 
         <!-- json xml -->
         <dependency>
@@ -336,6 +341,7 @@
         <!--
         JSON data source
         -->
+        <!--
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -348,12 +354,7 @@
             <version>3.20.2</version>
         </dependency>
 
-        <dependency>
-            <groupId>net.minidev</groupId>
-            <artifactId>json-smart</artifactId>
-            <version>2.4.9</version>
-        </dependency>
-
+        -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
