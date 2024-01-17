@@ -237,6 +237,7 @@ class CmdParser(val logger: Logger? = null) {
         TraceCmdListTerms,
         TraceCmdListExperts,
         TraceCmdListSources,
+        TraceCmdListDrivers,
         TraceCmdListActors,
 
         TraceCmdCheckFact,
