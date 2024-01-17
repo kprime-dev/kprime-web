@@ -38,6 +38,10 @@ button {
 	outline: 0;
 }
 
+strong {
+  background-color: yellow;
+}
+
 .hidden {
 	display: none;
 }

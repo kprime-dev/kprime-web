@@ -34,6 +34,10 @@ button {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+strong {
+  background-color: yellow;
+}
+
 
 :focus {
 	outline: 0;
