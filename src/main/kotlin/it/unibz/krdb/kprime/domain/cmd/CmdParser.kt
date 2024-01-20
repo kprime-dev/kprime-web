@@ -285,6 +285,7 @@ class CmdParser(val logger: Logger? = null) {
         TraceCmdUseSource,
         TraceCmdGetSource,
         TraceCmdAddSource,
+        TraceCmdRemSource,
         TraceCmdCurrentSource,
         TraceCmdFromSource,
         TraceCmdSetDbName,

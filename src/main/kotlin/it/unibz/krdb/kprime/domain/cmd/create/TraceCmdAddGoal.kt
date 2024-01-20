@@ -6,6 +6,7 @@ import it.unibz.krdb.kprime.domain.cmd.TraceCmd
 import it.unibz.krdb.kprime.domain.cmd.TraceCmdResult
 import it.unibz.krdb.kprime.domain.cmd.argument.TraceCmdArgumentFreeText
 import it.unibz.krdb.kprime.domain.cmd.argument.TraceCmdArgumentI
+import it.unibz.krdb.kprime.domain.cmd.argument.TraceCmdArgumentText
 import java.util.*
 
 object TraceCmdAddGoal: TraceCmd {

@@ -32,8 +32,8 @@ object TraceCmdListSources : TraceCmd {
 
     private fun successMessage(instanceSources: List<Source>,contextSources: List<Source>): String {
         var result = "Sources:"+System.lineSeparator()
-        for (source in instanceSources) { result += "(I${source.id}) ${source.name}: ${source.type}" + System.lineSeparator() }
-        for (source in contextSources)  { result += "(C${source.id}) ${source.name}: ${source.type}" + System.lineSeparator() }
+        for (source in instanceSources) { result += "(I${source.id}) ${source.name}: ${source.driver} ${source.user} ${source.location}" + System.lineSeparator() }
+        for (source in contextSources)  { result += "(C${source.id}) ${source.name}: ${source.driver} ${source.user} ${source.location}" + System.lineSeparator() }
         return result
     }
 

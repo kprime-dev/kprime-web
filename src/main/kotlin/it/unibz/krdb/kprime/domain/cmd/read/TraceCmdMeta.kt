@@ -36,24 +36,20 @@ object TraceCmdMeta: TraceCmd {
     }
 
     override fun executeMap(context: CmdContext, args: Map<String, Any>): TraceCmdResult {
+
         val sourceName =  args[ArgNames.source.name] as String
         val tableName = args[ArgNames.table.name] as String? ?: ""
         val catalogName = args[ArgNames.catalog.name] as String?
         val schemaName = args[ArgNames.schema.name] as String?
 
-        //val database = context.env.database
-//        println("Trace meta for context [$contextName]")
-//        val workingDataSource = context.pool.sourceService.newWorkingDataSourceOrH2(sourceName)
         val workingDataSource = context.pool.sourceService.getContextDataSourceByName(context.env.prjContextName,sourceName)
+            ?: context.pool.sourceService.getInstanceDataSourceByName(sourceName)
             ?: return TraceCmdResult() failure "Source not found $sourceName"
-//        println(workingDataSource)
+
         val metaDatabase = MetaSchemaJdbcAdapter().metaDatabase(workingDataSource,
             Database().withGid(),
             tableName, catalogName, schemaName)
-//        println("Trace meta for metadb [${metaDatabase!=null}]")
-//        println(metaDatabase)
-        //metaDatabase.source = context.env.datasource?.name?: ""
-        //context.env.database = metaDatabase
+
         return TraceCmdResult() message context.pool.dataService.prettyDatabase(metaDatabase)
     }
 }

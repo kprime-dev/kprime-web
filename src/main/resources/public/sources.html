@@ -171,9 +171,6 @@
                     <div class="modal-body">
                         <label for="driverType">Type:</label>
                         <select id="driverType" v-model="editingSource.type" @change="editingWith($event)">
-                            <option value="h2">H2</option>
-                            <option value="mysql">MySQL</option>
-                            <option value="psql">PostgresSQL</option>
                             <option v-for="driver in drivers" :value="driver.name" >{{driver.name}}</option>
                         </select>
                         <p>Driver: {{editingSource.driver}}</p>

@@ -51,5 +51,12 @@
 
     > sources -scope=<instance|context>
 
-    > source <scope.prefix.I|C><Source.id>
+    > source <scope.prefix.I|C><Source.id><_>
     
+    > add-source mydb org.h2.Driver sa jdbc:h2:mem:mydb
+
+    > rem-source <sourceName>
+
+    > use-source <sourceName>
+
+    > meta <sourceName>

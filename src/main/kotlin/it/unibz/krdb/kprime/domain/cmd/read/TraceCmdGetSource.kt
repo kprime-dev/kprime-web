@@ -33,14 +33,21 @@ object TraceCmdGetSource : TraceCmd {
         )
     }
 
-    override fun executeMap(context: CmdContext, args: Map<String, Any>): TraceCmdResult {
-        val contextLocation = context.env.prjContextLocation
+    override fun executeMap(cmdContext: CmdContext, args: Map<String, Any>): TraceCmdResult {
+        val contextLocation = cmdContext.env.prjContextLocation
         if (contextLocation.isEmpty()) return TraceCmdResult() failure "No current context location."
         val scopedSourceId =  args[ArgNames.SCOPED_SOURCE_ID.name] as String
+
+        if (scopedSourceId=="_") {
+            val datasource = cmdContext.env.datasource ?:
+                return TraceCmdResult() failure "Datasource not set in context."
+            return TraceCmdResult()  message cmdContext.pool.jsonService.toJson(datasource)
+        }
+
         //val sources = context.pool.sourceService.readInstanceSources()
-        val contextName = context.env.prjContextName
-        return context.pool.sourceService.getSourceByScopedId(contextName, ScopedName(scopedSourceId) ).fold(
-            onSuccess = { source -> TraceCmdResult()  message successMessage(context.pool.jsonService,source) payload source },
+        val contextName = cmdContext.env.prjContextName
+        return cmdContext.pool.sourceService.getSourceByScopedId(contextName, ScopedName(scopedSourceId) ).fold(
+            onSuccess = { source -> TraceCmdResult()  message successMessage(cmdContext.pool.jsonService,source) payload source },
             onFailure = { error -> TraceCmdResult() failure errorMessage(error) }
         )
     }

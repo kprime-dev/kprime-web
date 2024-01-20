@@ -32,6 +32,11 @@ class SourceService(
         return sourceRepositoryBuilder.build(context.location+".kprime/").save(source)
     }
 
+    fun remContextSource(contextName: String, sourceName: SourceName) {
+        val context = prjContextService.projectByName(contextName) ?: return
+        sourceRepositoryBuilder.build(context.location+".kprime/").delete{ it.name == sourceName.getValue() }
+    }
+
     fun readInstanceSources(): List<Source> {
         return sourceRepositoryBuilder.build(settingService.getInstanceDir()).findAll()
     }
@@ -51,6 +56,12 @@ class SourceService(
     fun getInstanceSourceByName(name:String): Source? {
         val allInstanceSources = readInstanceSources()
         return allInstanceSources.firstOrNull { s -> s.name == name }
+    }
+
+    fun getInstanceDataSourceByName(name:String): DataSource? {
+        val source = readInstanceSources().firstOrNull { s -> s.name == name }
+            ?: return null
+        return newWorkingDataSource(source)
     }
 
     fun getContextSourceByName(prjContext: PrjContextName, name:String): Source? {
