@@ -22,19 +22,10 @@
 <body>
     <h1><a href="/"><img class="logo" src="img/kprime-logo-bw.png"></a> Drivers</h1>
 
-    <!--
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/" >Home</a></li>
-            <li class="breadcrumb-item"><a href="/dictionary.html">Terms</a></li>
-        </ol>
-    </nav>
-    -->
     <div class="alert alert-info" role="alert">
         <p>A Driver gives access to data source. </p>
         <table class="noborder">
             <tr><td class="noborder">
-                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addDriverModal">Add a new driver</a>
                 <a href="sources.html" class="btn btn-primary" >Sources</a>
             </td>
             </tr>
@@ -61,10 +52,8 @@
                         <img src="/img/driver.png" class="card-img-top" alt="...">
                         <div class="card-body card-img-overlay">
                             <h5 class="card-title">{{ driver.name }}</h5>
-                            <p class="card-text">{{ driver.type }}</p>
-                            <p class="card-text">{{ driver.className }}</p>
-                            <button class="btn btn-primary"  @click="editDriver(driver)" data-toggle="modal" data-target="#editDriverModal">Edit</button>
-                            <button class="btn btn-danger" @click="removeDriver(driver)">X</button>
+                            <p  class="card-text" >{{ driver.type }}</p>
+                            <p  class="card-text" >{{ driver.className }}</p>
                         </div>
                     </div>
 
@@ -72,58 +61,6 @@
             </div>
         </div>
 
-
-        <div id="addDriverModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">New Driver : </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Type:</p>
-                        <input v-model="newDriver.type">
-                        <p>Name:</p>
-                        <input v-model="newDriver.name">
-                        <p>JAR Location:</p>
-                        <input v-model="newDriver.jarLocation">
-                        <p>Class Name:</p>
-                        <input v-model="newDriver.className">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" @click="addSaveDriver()" class="btn btn-success">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="editDriverModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Id: {{editingDriver.id}}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Type: {{editingDriver.type}}</p>
-                        <p>Driver: {{editingDriver.className}}</p>
-                        <p>Name:</p>
-                        <input v-model="editingDriver.name">
-                        <p>Location:</p>
-                        <input v-model="editingDriver.jarLocation">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" @click="editSaveDriver()" class="btn btn-success">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
     <script src="drivers.js"></script>

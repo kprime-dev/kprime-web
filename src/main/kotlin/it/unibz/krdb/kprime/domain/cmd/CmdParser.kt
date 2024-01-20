@@ -208,8 +208,6 @@ class CmdParser(val logger: Logger? = null) {
         TraceCmdCSClean,
         TraceCmdCSOids,
 
-        TraceCmdAddSpace,
-
         TraceCmdGetDatabase,
         TraceCmdDatabaseClean,
 

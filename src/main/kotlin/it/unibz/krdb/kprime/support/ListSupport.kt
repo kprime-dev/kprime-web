@@ -12,3 +12,10 @@ fun <T> List<T>.append(newValue: T): List<T> {
     return newList
 }
 
+fun <T> MutableList<T>.addIf(element: T, condition: (T) -> Boolean) {
+    if (this.findLast(condition)!=null)
+        this.add(element)
+}
+
+
+

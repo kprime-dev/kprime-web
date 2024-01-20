@@ -3,10 +3,10 @@ package it.unibz.krdb.kprime.domain.cmd.update
 import it.unibz.krdb.kprime.domain.cmd.CmdContext
 import it.unibz.krdb.kprime.domain.cmd.TraceCmd
 import it.unibz.krdb.kprime.domain.cmd.TraceCmdResult
-import it.unibz.krdb.kprime.domain.cmd.argument.TraceCmdArgumentFreeText
 import it.unibz.krdb.kprime.domain.cmd.argument.TraceCmdArgumentI
 import it.unibz.krdb.kprime.domain.cmd.argument.TraceCmdArgumentSourceName
 import it.unibz.krdb.kprime.domain.source.SourceName
+import it.unibz.krdb.kprime.support.addIf
 
 object TraceCmdUseSource : TraceCmd {
 
@@ -37,10 +37,18 @@ object TraceCmdUseSource : TraceCmd {
     }
 
     override fun executeMap(context: CmdContext, args: Map<String, Any>): TraceCmdResult {
-        val sourceName = SourceName(args[ArgNames.SOURCE_NAME.name] as String)
-        context.env.database.source = sourceName.getValue()
-        context.env.datasource = context.pool.sourceService.newWorkingDataSourceOrH2(sourceName.getValue())
-        return TraceCmdResult() message "Set $sourceName for current database."
+        val sourceNameValue = SourceName(args[ArgNames.SOURCE_NAME.name] as String).getValue()
+        val sourceService = context.pool.sourceService
+        context.env.database.source = sourceNameValue
+        context.env.datasource = sourceService.newWorkingDataSourceOrH2(sourceNameValue)
+        val contextName = context.env.prjContextName.value
+        val sources = sourceService.readContextSources(contextName).toMutableList()
+        val source = sourceService.getContextSourceByName(context.env.prjContextName,sourceNameValue)
+            ?: return TraceCmdResult() failure "Source $sourceNameValue not found."
+        sources.addIf(source) { it.name != source.name }
+        sourceService.writeContextSources(contextName,sources)
+        return TraceCmdResult() message "Set $sourceNameValue for current database."
     }
 
 }
+

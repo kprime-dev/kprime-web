@@ -83,7 +83,6 @@ class Router(private val viewController: ViewController,
             ApiBuilder.get("/meta/{sourceName}",dataController.meta)
             ApiBuilder.get("/templates",storyController.getTemplates)
             ApiBuilder.get("/drivers",sourceController.getDrivers)
-            ApiBuilder.put("/drivers",sourceController.putDrivers)
             ApiBuilder.get("/transfnames",transformerController.getTransformerNames)
             ApiBuilder.get("/transformer/{transformerName}",transformerController.getTransformer)
             ApiBuilder.put("/transformer",transformerController.putTransformer)

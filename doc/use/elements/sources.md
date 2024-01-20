@@ -28,6 +28,11 @@
 
 * A Source may have a license URL.
 
+## Drivers
+
+* A Driver is a JDBC Driver.
+
+* Drivers are collected from Java ClassPath.
 
 ## DataSource (26)
 

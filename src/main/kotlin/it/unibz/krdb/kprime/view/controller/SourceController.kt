@@ -56,13 +56,7 @@ class SourceController(val sourceService: SourceService, val settingService: Set
     }
 
     var getDrivers = Handler { ctx : Context ->
-        ctx.json(sourceService.readAllInstanceDriversPlusH2())
-    }
-
-    var putDrivers = Handler { ctx: Context ->
-        val drivers = ctx.bodyAsClass<Array<Driver>>().toMutableList()
-        sourceService.writeAllInstanceDrivers(drivers)
-        ctx.status(HttpServletResponse.SC_ACCEPTED)
+        ctx.json(sourceService.readAllInstanceDrivers())
     }
 
 }
