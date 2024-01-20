@@ -49,11 +49,13 @@
 
 ## Source Commands
 
-    > sources -scope=<instance|context>
+    > sources
 
     > source <scope.prefix.I|C><Source.id><_>
-    
+
+    > add-source    
     > add-source mydb org.h2.Driver sa jdbc:h2:mem:mydb
+    > add-source mydb2 org.h2.Driver sa jdbc:h2:~/mydb2.db
 
     > rem-source <sourceName>
 

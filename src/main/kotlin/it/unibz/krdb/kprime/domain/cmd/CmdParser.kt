@@ -1,5 +1,6 @@
 package it.unibz.krdb.kprime.domain.cmd
 
+import it.unibz.krdb.kprime.domain.LoggerService
 import it.unibz.krdb.kprime.domain.cmd.check.TraceCmdCheckFact
 import it.unibz.krdb.kprime.domain.cmd.create.*
 import it.unibz.krdb.kprime.domain.cmd.delete.*
@@ -12,101 +13,17 @@ import it.unibz.krdb.kprime.domain.cmd.read.*
 import it.unibz.krdb.kprime.domain.cmd.rest.TraceCmdCallHttp
 import it.unibz.krdb.kprime.domain.cmd.sql.*
 import it.unibz.krdb.kprime.domain.cmd.update.*
-import it.unibz.krdb.kprime.domain.setting.SettingService
 import it.unibz.krdb.kprime.domain.trace.TraceName
-import it.unibz.krdb.kprime.support.substring
-import org.apache.commons.io.input.ReversedLinesFileReader
-import org.apache.logging.log4j.Logger
 import unibz.cs.semint.kprime.domain.db.Database
-import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import java.io.File
-import java.io.IOException
-import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-sealed class CommandEvent {
-    abstract fun toLog(): String
-}
-
-class CommandResponseEvent(
-    val time: LocalDateTime,
-    val author: String,
-    private val commandId: String,
-    val result: String,
-    val warn: String,
-    val errors: String,
-    val oid: String = ""
-) : CommandEvent() {
-
-
-    override fun toString(): String {
-        return prefix + time.format(dateTimeFormatter) + "_" + author + "> " + commandId.padEnd(50, ' ') +
-                System.lineSeparator() +
-                "$result warning='$warn' error='$errors'" + System.lineSeparator()
-    }
-
-    override fun toLog(): String {
-        return prefix + time.format(dateTimeFormatter) + "_" + author + "> " + commandId +
-                " result='$result' warning='$warn' error='$errors' oid='$oid'"
-    }
-
-    companion object {
-        const val prefix = "(response):"
-        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:HHmmss")
-        fun fromLog(line: String): CommandResponseEvent {
-            val time = LocalDateTime.parse(line.substring(prefix, "_"), dateTimeFormatter)
-            val author = line.substring("_", ">")
-            val commandId = line.substring("> ", " result=").trim()
-            val result = line.substring("result='", "' warning=")
-            val warning = line.substring("warning='", "' error='")
-            val error = line.substring(" error='", "' oid='")
-            val oid = line.substring(" oid='", "'")
-            return CommandResponseEvent(time, author, commandId, result, warning, error, oid)
-        }
-
-    }
-
-}
-
-class CommandRequestEvent(
-    val time: LocalDateTime,
-    val author: String,
-    val command: String,
-    val oid: String = "",
-    val contextName: String = ""
-) : CommandEvent() {
-
-
-    override fun toString(): String {
-        return prefix + time.format(dateTimeFormatter) + "_" + author + "> " + command.padEnd(50, ' ') +
-                System.lineSeparator()
-    }
-
-    override fun toLog(): String {
-        return prefix + time.format(dateTimeFormatter) + "_" + author + "> " + command + " oid='$oid'"
-    }
-
-    companion object {
-        const val prefix = "(request):"
-        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:HHmmss")
-        fun fromLog(line: String): CommandRequestEvent {
-            val time = LocalDateTime.parse(line.substring(prefix, "_"), CommandResponseEvent.dateTimeFormatter)
-            val author = line.substring("_", ">")
-            val command = line.substring("> ", " oid=").trim()
-            val oid = line.substring(" oid='", "'")
-            return CommandRequestEvent(time, author, command, oid)
-        }
-
-    }
-}
-
-class CmdParser(val logger: Logger? = null) {
+class CmdParser(val logger: LoggerService? = null, val cmdLogger: CmdLoggerService? = null) {
 
     var commandEventLog = mutableListOf<CommandEvent>()
-    var changesetLog = mutableListOf<ChangeSet>()
 
     val commandList = listOf(
         TraceCmdAddGoal,
@@ -330,15 +247,15 @@ class CmdParser(val logger: Logger? = null) {
     private fun isNotTest(): Boolean = logger != null
 
     fun parse(command: String, context: CmdContext): Pair<TraceCmdResult, CmdContext> {
-        if (isNotTest() && commandEventLog.isEmpty()) {
-            readCommandsStory()
-        }
         return when (command) {
             "" -> parseEmptyCommand(context, command)
-            "log" -> parseLogMetaCommand(context)
             "undo" -> parseUndoMetaCommand(context)
             else -> parseCommand(command, context)
         }
+    }
+
+    fun getCommandEvents(): List<CommandEvent> {
+        return cmdLogger?.getCommandEvents()?: emptyList()
     }
 
     internal fun commandName(command: String) = command.trim().split(" ")[0].lowercase(Locale.getDefault())
@@ -363,7 +280,7 @@ class CmdParser(val logger: Logger? = null) {
                 context.env.changeSet.commands?.add(command)
             }
         }
-        if (isNotTest()) logCommandResponse(context, command, response)
+        cmdLogger?.logCommandResponse(context, command, response)
         return Pair(response, context)
     }
 
@@ -382,13 +299,6 @@ class CmdParser(val logger: Logger? = null) {
     private fun parseUndoMetaCommand(context: CmdContext): Pair<TraceCmdResult, CmdContext> {
         val undone = undoCommand(context)
         return Pair(TraceCmdResult() message "undo $undone", context)
-    }
-
-    private fun parseLogMetaCommand(context: CmdContext): Pair<TraceCmdResult, CmdContext> {
-        return Pair(
-            TraceCmdResult() message commandEventLog.reversed().take(5)
-                .joinToString(separator = System.lineSeparator()), context
-        )
     }
 
     private fun parseEmptyCommand(context: CmdContext, command: String): Pair<TraceCmdResult, CmdContext> {
@@ -457,7 +367,7 @@ class CmdParser(val logger: Logger? = null) {
         val cmd = commandMap[commandName]
             ?: return TraceCmdResult() failure "No command [$commandName] found."
         val executeResult: TraceCmdResult = try {
-            if (isNotTest()) logCommandRequest(context, context.env.author, cmd, commandLine)
+            cmdLogger?.logCommandRequest(context, context.env.author, cmd, commandLine)
             cmd.execute(context, commandLine)
         } catch (eia: Throwable) {
             eia.printStackTrace()
@@ -485,72 +395,10 @@ class CmdParser(val logger: Logger? = null) {
         }
     }
 
-    private fun logCommandRequest(
-        context: CmdContext,
-        author: String,
-        cmd: TraceCmd?,
-        commandLine: String
-    ): TraceCmd? {
-        //logger?.info("author:$author | cmd:${cmd?.getCmdName()} | topic:${cmd?.getCmdTopics()} | line:$commandLine")
-        val event = CommandRequestEvent(LocalDateTime.now(), author, commandLine, oid = "",context.env.prjContextName.value)
-        commandEventLog.add(event)
-        writeCommandsStory(event)
-        return cmd
-    }
-
-    private fun logCommandResponse(context: CmdContext, commandLine: String, response: TraceCmdResult) {
-        val event = CommandResponseEvent(
-            LocalDateTime.now(), context.env.author, commandLine,
-            if (response.isOK()) "SUCCESS" else "FAILURE", response.warning, response.failure,
-            oid = response.oid
-        )
-        commandEventLog.add(event)
-        writeCommandsStory(event)
-    }
 
     private fun isMutatorCmd(cmdName: String) =
         !cmdName.startsWith("changeset") &&
                 commandMap[cmdName]?.getCmdTopics()?.contains("write") == true
-
-    private fun readLastLine(file: File, numLastLineToRead: Int): List<String> {
-        val result: MutableList<String> = ArrayList()
-        try {
-            ReversedLinesFileReader(file, StandardCharsets.UTF_8).use { reader ->
-                var line: String
-                while (reader.readLine().also { line = it } != null && result.size < numLastLineToRead) {
-                    result.add(line)
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return result
-    }
-
-    fun getCommandEvents(): List<CommandEvent> {
-        if (commandEventLog.isEmpty()) readCommandsStory()
-        return commandEventLog
-    }
-
-    private fun readCommandsStory(linesToRead: Int = 10) {
-        val logCompleteFileName = SettingService.getClassInstanceDir() + "logs/commands.log"
-        if (!File(logCompleteFileName).exists()) return
-        val linesRead = readLastLine(File(logCompleteFileName), linesToRead)
-//                List<String> = File(logCompleteFileName).bufferedReader()
-//            .useLines { lines: Sequence<String > -> lines.take(linesToRead).toList() }
-        for (line in linesRead) {
-            if (line.startsWith(CommandRequestEvent.prefix)) commandEventLog.add(CommandRequestEvent.fromLog(line))
-            if (line.startsWith(CommandResponseEvent.prefix)) commandEventLog.add(CommandResponseEvent.fromLog(line))
-        }
-
-    }
-
-    private fun writeCommandsStory(event: CommandEvent) {
-        val logCompleteFileName = SettingService.getClassInstanceDir() + "logs/commands.log"
-        val log = File(logCompleteFileName)
-        if (!log.exists()) log.createNewFile()
-        log.appendText(event.toLog() + System.lineSeparator())
-    }
 
     private fun undoCommand(context: CmdContext): String {
         val traceName = context.env.currentTrace

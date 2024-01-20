@@ -78,7 +78,6 @@ class CmdService (
                 contexts [${contextMap.size}]
                 commands [${cmdParser.commandList.size}]
                 command logs [${cmdParser.commandEventLog.size}]
-                change-set logs [${cmdParser.changesetLog.size}]
         """.trimIndent()
         if (command == "info-context") return TraceCmdResult() message """
                 contextId [$contextId] 
@@ -156,7 +155,7 @@ class CmdService (
     companion object {
 
         //private val cmdParser = CmdParser(LogManager.getLogger())
-        private val cmdParser = CmdParser()
+        private val cmdParser = CmdParser(null,CmdLoggerService())
 
         private val contextMap : MutableMap<String, CmdContext> = mutableMapOf()
 
