@@ -5,6 +5,7 @@ import it.unibz.krdb.kprime.domain.cmd.check.TraceCmdCheckFact
 import it.unibz.krdb.kprime.domain.cmd.create.*
 import it.unibz.krdb.kprime.domain.cmd.delete.*
 import it.unibz.krdb.kprime.domain.cmd.expert.*
+import it.unibz.krdb.kprime.domain.cmd.graalvm.TraceCmdRunJs
 import it.unibz.krdb.kprime.domain.cmd.rdf.TraceCmdImportOntouml
 import it.unibz.krdb.kprime.domain.cmd.rdf.TraceCmdImportTTL
 import it.unibz.krdb.kprime.domain.cmd.rdf.TraceCmdReadOntouml
@@ -156,6 +157,8 @@ class CmdParser(val logger: LoggerService? = null, val cmdLogger: CmdLoggerServi
         TraceCmdListActors,
 
         TraceCmdCheckFact,
+
+        TraceCmdRunJs,
 
         TraceCmdHelpCsdp,
         TraceCmdHelpDdd,

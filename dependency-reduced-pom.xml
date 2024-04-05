@@ -138,6 +138,19 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>org.graalvm.polyglot</groupId>
+      <artifactId>js</artifactId>
+      <version>23.1.2</version>
+      <type>pom</type>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>js-community</artifactId>
+          <groupId>org.graalvm.polyglot</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.1</version>
@@ -164,6 +177,7 @@
   </dependencies>
   <properties>
     <kotlin.version>1.7.0</kotlin.version>
+    <graalvm.version>23.1.2</graalvm.version>
     <detekt.plugin.version>1.8.0</detekt.plugin.version>
     <jackson.version>2.15.2</jackson.version>
     <pac4j.version>4.0.0</pac4j.version>
@@ -177,7 +191,7 @@
     <javalin.version>4.6.8</javalin.version>
     <dependency-check.plugin.version>8.2.1</dependency-check.plugin.version>
     <main.class>it.unibz.krdb.kprime.StarterKt</main.class>
-    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.source>21</maven.compiler.source>
     <jackson.databind.version>2.15.2</jackson.databind.version>
     <h2.version>2.2.224</h2.version>
     <woodstox.version>5.4.0</woodstox.version>
@@ -187,9 +201,9 @@
     <lucene.version>9.2.0</lucene.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <commons.csv.version>1.8</commons.csv.version>
-    <java.version>11</java.version>
+    <java.version>21</java.version>
     <kprime.expert.version>1.0-SNAPSHOT</kprime.expert.version>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.target>21</maven.compiler.target>
     <kprime.arm.version>1.0-SNAPSHOT</kprime.arm.version>
     <app.distribution.directory>${project.build.directory}/distributions/app</app.distribution.directory>
   </properties>

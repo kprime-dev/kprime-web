@@ -6,7 +6,7 @@ import it.unibz.krdb.kprime.domain.trace.TraceName
 
 interface TraceCmd {
 
-    enum class Topic { WRITE, READ, CHECK,
+    enum class Topic { WRITE, READ, CHECK, EXEC,
         DATABASE, TABLE, STORY, TERM, GOAL, MAPPING, SOURCE, DRIVER, CONSTRAINT, PROJECT, CONTEXT,
         ACTOR, CHANGESET, DATA, VOCABULARY, LABEL,
         LOGICAL, CONCEPTUAL, PHYSICAL, STATISTICAL

@@ -20,6 +20,8 @@ import org.apache.lucene.index.Term
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.store.FSDirectory
+import org.graalvm.polyglot.Context
+import org.graalvm.polyglot.Value
 import java.io.File
 import java.io.FileReader
 import java.net.URLEncoder
@@ -134,6 +136,8 @@ class StoryService(val settingService: SettingService,
         }
 
     }
+
+
     fun addStory(contextName: PrjContextName, traceName: TraceName, storyName: String, templateName: String): Result<String> {
         // copy file
         // from setting.templateDir + templateName (extension included)
@@ -345,8 +349,6 @@ class StoryService(val settingService: SettingService,
         return indexedFileName
     }
 
-
-
     fun findText(workingDir: String, termQuery: String, indexDirName: String = getStoryIndexDir()): List<Pair<Document, Float>> {
         if (File(indexDirName).walk().none()) return  emptyList()
         val indexDir = FSDirectory.open(Paths.get(indexDirName))
@@ -372,7 +374,13 @@ class StoryService(val settingService: SettingService,
         return "/noteview.html?pr=$storyProject&tr=$storyTraceDirUrlized&tf=$docFileName"
     }
 
-
-
-
+    fun execJs(jsFun:String):Result<String> {
+        try {
+            Context.create().use { context ->
+                println("[[$jsFun]]")
+                val value: Value = context.eval("js", jsFun)
+                return Result.success(value.execute(22, 4555).asString())
+            }
+        } catch (e: Exception) { return Result.failure(e) }
+    }
 }

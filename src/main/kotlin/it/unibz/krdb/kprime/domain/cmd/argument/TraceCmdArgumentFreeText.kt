@@ -14,7 +14,11 @@ open class TraceCmdArgumentFreeText(name:String, description:String, val min:Int
         val errors = ArrayList<String>()
         if (min>0 && value.length<min)  errors.add("$name[$value] size has to be at less $min chars.")
         if (max>0 && value.length>max)  errors.add("$name[$value] size has to be at most $max chars.")
-        if (!(value.trim().isNotEmpty() && value.matches(pattern.toRegex()))) errors.add("$name[$value] has forbidden chars, required chars in [a-zA-Z0-9_].")
+        if (pattern.isNotEmpty()) {
+            if (!(value.trim()
+                    .isNotEmpty() && value.matches(pattern.toRegex()))
+            ) errors.add("$name[$value] has forbidden chars, required chars in [a-zA-Z0-9_].")
+        }
         return errors
     }
 

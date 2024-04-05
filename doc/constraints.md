@@ -24,6 +24,7 @@ Due to time priorities and team skills we had to sacrifice:
 
 ### Requirements
 
+* GraalVM 21
 * Kotlin
 * Data Schema Transformation Spikes
   * SQL knowledge 
