@@ -12,6 +12,7 @@ import it.unibz.krdb.kprime.domain.project.PrjContextService
 import it.unibz.krdb.kprime.domain.term.LabelField
 import it.unibz.krdb.kprime.support.FolderZipper
 import it.unibz.krdb.kprime.domain.user.UserService
+import it.unibz.krdb.kprime.support.MdHtmlPublisher
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import java.io.StringWriter
 import javax.servlet.http.HttpServletResponse
@@ -87,7 +88,7 @@ class ProjectController(prjContextService: PrjContextService, userService: UserS
     // https://mkyong.com/java/how-to-compress-files-in-zip-format/
     // https://www.codeproject.com/articles/30561/using-zip-content-for-delivery-over-http
     // https://javalin.io/documentation#context
-    var publishProject = Handler { ctx ->
+    var publishZipProject = Handler { ctx ->
         val projectName = ctx.pathParam("projectName")
         val project = prjContextService.projectByName(projectName)
         if (project==null) {
@@ -99,4 +100,24 @@ class ProjectController(prjContextService: PrjContextService, userService: UserS
             ctx.status(200)
         }
     }
+
+    var publishHtmlProject = Handler { ctx ->
+        val projectName = ctx.pathParam("projectName")
+        val project = prjContextService.projectByName(projectName)
+        if (project==null) {
+            ctx.status(404)
+        } else {
+            val publisher = MdHtmlPublisher()
+            publisher.translateFolder(
+                project.location,
+                "/home/nipe/Temp/published-html",
+                singleFile = false,
+                createToc = true)
+            val zipFile = FolderZipper().zip("/home/nipe/Temp/published-html")
+            ctx.result(zipFile.inputStream())
+            ctx.contentType("application/zip")
+            ctx.status(200)
+        }
+    }
+
 }
