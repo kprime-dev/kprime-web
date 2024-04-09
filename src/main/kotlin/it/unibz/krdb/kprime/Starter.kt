@@ -148,7 +148,7 @@ fun startServer() {
             searchService,
         ),
         statController = StatController(statService),
-        projectController = ProjectController(prjContextService, userService, rdfService),
+        projectController = ProjectController(settingService,prjContextService, userService, rdfService),
         searchController = SearchController(searchService),
         actorController = ActorController(cmdService, actorService),
         chartController = ChartController(

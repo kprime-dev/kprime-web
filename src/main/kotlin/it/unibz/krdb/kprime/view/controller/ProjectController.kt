@@ -9,15 +9,23 @@ import it.unibz.krdb.kprime.adapter.jackson.JacksonProject
 import it.unibz.krdb.kprime.domain.RdfService
 import it.unibz.krdb.kprime.domain.project.PrjContextLocation
 import it.unibz.krdb.kprime.domain.project.PrjContextService
+import it.unibz.krdb.kprime.domain.setting.SettingService
 import it.unibz.krdb.kprime.domain.term.LabelField
 import it.unibz.krdb.kprime.support.FolderZipper
 import it.unibz.krdb.kprime.domain.user.UserService
 import it.unibz.krdb.kprime.support.MdHtmlPublisher
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import java.io.StringWriter
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.servlet.http.HttpServletResponse
 
-class ProjectController(prjContextService: PrjContextService, userService: UserService, rdfService: RdfService) {
+class ProjectController(
+    settingService: SettingService,
+    prjContextService: PrjContextService,
+    userService: UserService,
+    rdfService: RdfService
+) {
 
     val getProjectsPage =  Handler { ctx: Context ->
         val templModel :MutableMap<String,Any> = mutableMapOf()
@@ -107,13 +115,17 @@ class ProjectController(prjContextService: PrjContextService, userService: UserS
         if (project==null) {
             ctx.status(404)
         } else {
+            val sdf = SimpleDateFormat("yyyyMMddHHmmss")
+            val timestamp =  sdf.format(Date())
+            val tmpDir = "${settingService.getInstanceDir()}/publications/$projectName/$timestamp/"
+            println("publishHtmlProject.tmpDir [$tmpDir]")
             val publisher = MdHtmlPublisher()
             publisher.translateFolder(
                 project.location,
-                "/home/nipe/Temp/published-html",
+                tmpDir,
                 singleFile = false,
                 createToc = true)
-            val zipFile = FolderZipper().zip("/home/nipe/Temp/published-html")
+            val zipFile = FolderZipper().zip(tmpDir)
             ctx.result(zipFile.inputStream())
             ctx.contentType("application/zip")
             ctx.status(200)
