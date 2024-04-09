@@ -129,7 +129,7 @@ class ProjectController(
                 tmpDir,
                 singleFile = false,
                 createToc = true)
-            val zipFileName = "${projectName}_$timestamp"
+            val zipFileName = "${projectName}_html_$timestamp"
             val zipFile = FolderZipper().zip(tmpDir)
             ctx.result(zipFile.inputStream())
             ctx.header("Content-Disposition", "attachment; filename=$zipFileName")

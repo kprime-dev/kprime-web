@@ -12,6 +12,7 @@ import it.unibz.krdb.kprime.domain.cmd.rdf.TraceCmdSparqlLabel
 import it.unibz.krdb.kprime.domain.cmd.read.*
 import it.unibz.krdb.kprime.domain.cmd.rest.TraceCmdCallHttp
 import it.unibz.krdb.kprime.domain.cmd.sql.*
+import it.unibz.krdb.kprime.domain.cmd.system.TraceCmdExecute
 import it.unibz.krdb.kprime.domain.cmd.update.*
 import it.unibz.krdb.kprime.domain.trace.TraceName
 import unibz.cs.semint.kprime.domain.db.Database
@@ -26,6 +27,8 @@ class CmdParser(val logger: LoggerService? = null, val cmdLogger: CmdLoggerServi
     var commandEventLog = mutableListOf<CommandEvent>()
 
     val commandList = listOf(
+        TraceCmdExecute,
+
         TraceCmdAddGoal,
         TraceCmdRemGoal,
         TraceCmdGetGoal,
