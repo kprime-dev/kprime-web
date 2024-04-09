@@ -65,9 +65,10 @@
 
         <div class="row">
             <div class="col">
-                <h3> <img width="150px" v-bind:src="contextLogoUrl"><b> Context {{currentProject}}</b>  <a href="/admin.html" class="btn btn-success">Manage</a>
-                    <a v-if="hasCurrentProject" v-bind:href="'/project/'+currentProject+'/publish/zip'" class="btn btn-success">Export ZIP</a>
-                    <a v-if="hasCurrentProject" v-bind:href="'/project/'+currentProject+'/publish/html'" class="btn btn-success">Export HTML</a>
+                <h3> <img width="150px" v-bind:src="contextLogoUrl"><b> Context {{currentProject}}</b>  <a href="/admin.html" class="btn btn-success">Manage</a><br>
+                    <a v-if="hasCurrentProject" v-bind:href="'/project/'+currentProject+'/publish/zip'" class="btn btn-outline-success btn-sm">Export ZIP</a>
+                    <a v-if="hasCurrentProject" v-bind:href="'/project/'+currentProject+'/publish/html'" class="btn btn-outline-success btn-sm">Export HTML</a>
+                    <a v-if="hasCurrentProject" v-bind:href="'/project/'+currentProject+'/publish/pdf'" class="btn btn-outline-success btn-sm">Export PDF</a>
                 </h3>
             </div>
             <div class="col">

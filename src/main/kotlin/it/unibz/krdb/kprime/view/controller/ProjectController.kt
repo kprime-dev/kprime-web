@@ -14,7 +14,10 @@ import it.unibz.krdb.kprime.domain.term.LabelField
 import it.unibz.krdb.kprime.support.FolderZipper
 import it.unibz.krdb.kprime.domain.user.UserService
 import it.unibz.krdb.kprime.support.MdHtmlPublisher
+import it.unibz.krdb.kprime.support.MdPdfPublisher
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
+import java.io.File
+import java.io.InputStream
 import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.*
@@ -134,6 +137,36 @@ class ProjectController(
             ctx.result(zipFile.inputStream())
             ctx.header("Content-Disposition", "attachment; filename=$zipFileName")
             ctx.contentType("application/zip")
+            ctx.status(200)
+        }
+    }
+
+    var publishPdfProject = Handler { ctx ->
+        val projectName = ctx.pathParam("projectName")
+        val project = prjContextService.projectByName(projectName)
+        if (project==null) {
+            ctx.status(404)
+        } else {
+            val sdf = SimpleDateFormat("yyyyMMddHHmmss")
+            val timestamp =  sdf.format(Date())
+            val tmpDir = "${settingService.getInstanceDir()}/publications/$projectName/$timestamp/"
+            println("publishPdfProject.tmpDir [$tmpDir]")
+            val metadata = mapOf(
+                MdPdfPublisher.Metadata.Author to "",
+                MdPdfPublisher.Metadata.Version to "Version: 1.0"
+            )
+            val publisher = MdPdfPublisher()
+            val pdfStream = publisher.translateFolder(
+                project.location,
+                tmpDir,
+                project.location,
+                projectName,
+                metadata,
+                createToc = true)
+            val pdfFileName = "${projectName}_html_$timestamp"
+            ctx.result(File(pdfStream).readBytes())
+            ctx.header("Content-Disposition", "attachment; filename=$pdfFileName")
+            ctx.contentType("application/pdf")
             ctx.status(200)
         }
     }

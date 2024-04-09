@@ -173,6 +173,7 @@ class Router(private val viewController: ViewController,
             ApiBuilder.get("/project/{projectName}", projectController.getProjectPage)
             ApiBuilder.get("/project/{projectName}/publish/zip", projectController.publishZipProject)
             ApiBuilder.get("/project/{projectName}/publish/html", projectController.publishHtmlProject)
+            ApiBuilder.get("/project/{projectName}/publish/pdf", projectController.publishPdfProject)
             ApiBuilder.get("/project/{projectName}/dictionary/{traceName}/{traceFileName}/{term}", termController.getProjectFileTermPage)
             ApiBuilder.get("/project/{projectName}/dictionary/{term}", termController.getProjectTermPage)
             ApiBuilder.get("/project/{projectName}/dictionary", termController.getProjectTermsPage)
