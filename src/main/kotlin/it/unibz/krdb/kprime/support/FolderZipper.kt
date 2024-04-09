@@ -14,8 +14,8 @@ class FolderZipper {
         val outputZipFile = File.createTempFile("out", ".zip")
         ZipOutputStream(BufferedOutputStream(FileOutputStream(outputZipFile))).use { zos ->
             inputDirectory.walkTopDown().forEach { file ->
-                val zipFileName = file.absolutePath.removePrefix(inputDirectory.absolutePath).removePrefix("/")
-                val entry = ZipEntry( "$zipFileName${(if (file.isDirectory) "/" else "" )}")
+                val entryFileName = file.absolutePath.removePrefix(inputDirectory.absolutePath).removePrefix("/")
+                val entry = ZipEntry( "$entryFileName${(if (file.isDirectory) "/" else "" )}")
                 zos.putNextEntry(entry)
                 if (file.isFile) {
                     file.inputStream().copyTo(zos)

@@ -102,9 +102,13 @@ class ProjectController(
         if (project==null) {
             ctx.status(404)
         } else {
+            val sdf = SimpleDateFormat("yyyyMMddHHmmss")
+            val timestamp =  sdf.format(Date())
+            val zipFileName = "${projectName}_$timestamp"
             val zipFile = FolderZipper().zip(project.location)
             ctx.result(zipFile.inputStream())
             ctx.contentType("application/zip")
+            ctx.header("Content-Disposition", "attachment; filename=$zipFileName")
             ctx.status(200)
         }
     }
@@ -125,8 +129,10 @@ class ProjectController(
                 tmpDir,
                 singleFile = false,
                 createToc = true)
+            val zipFileName = "${projectName}_$timestamp"
             val zipFile = FolderZipper().zip(tmpDir)
             ctx.result(zipFile.inputStream())
+            ctx.header("Content-Disposition", "attachment; filename=$zipFileName")
             ctx.contentType("application/zip")
             ctx.status(200)
         }
