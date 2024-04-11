@@ -181,16 +181,24 @@
     <jackson.databind.version>2.15.2</jackson.databind.version>
     <h2.version>2.2.224</h2.version>
     <woodstox.version>5.4.0</woodstox.version>
+    <postgresql.version>42.5.4</postgresql.version>
     <archunit.version>1.0.1</archunit.version>
     <jackson.kotlin.version>2.12.2</jackson.kotlin.version>
+    <mysql.version>8.0.32</mysql.version>
+    <webtau.version>2.2</webtau.version>
     <appassembler.plugin.version>2.1.0</appassembler.plugin.version>
+    <graphql.version>20.4</graphql.version>
     <lucene.version>9.2.0</lucene.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <commons.csv.version>1.8</commons.csv.version>
     <java.version>11</java.version>
+    <jsoup.version>1.17.2</jsoup.version>
+    <saucerpdf.version>9.5.1</saucerpdf.version>
     <kprime.expert.version>1.0-SNAPSHOT</kprime.expert.version>
     <maven.compiler.target>11</maven.compiler.target>
     <kprime.arm.version>1.0-SNAPSHOT</kprime.arm.version>
+    <commons.io.version>2.11.0</commons.io.version>
+    <duckdb.version>0.9.2</duckdb.version>
     <app.distribution.directory>${project.build.directory}/distributions/app</app.distribution.directory>
   </properties>
 </project>
