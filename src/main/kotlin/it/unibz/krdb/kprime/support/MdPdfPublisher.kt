@@ -29,6 +29,7 @@ class MdPdfPublisher {
         val files =
         if (index.exists()) {
             index.readText().split(System.lineSeparator())
+                .filter { it.isNotEmpty() && !it.startsWith("---") && !it.startsWith("#")}
                 .map { File(contextPath+it) }
                 .filter { it.exists() }
         } else {
