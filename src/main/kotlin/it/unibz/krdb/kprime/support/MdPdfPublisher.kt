@@ -30,6 +30,7 @@ class MdPdfPublisher {
         if (index.exists()) {
             index.readText().split(System.lineSeparator())
                 .filter { it.isNotEmpty() && !it.startsWith("---") && !it.startsWith("#")}
+                .map { it.substringAfter("](").substringBeforeLast(")") }
                 .map { File(contextPath+it) }
                 .filter { it.exists() }
         } else {

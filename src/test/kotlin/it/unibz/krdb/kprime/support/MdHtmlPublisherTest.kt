@@ -50,39 +50,46 @@ class MdHtmlPublisherTest {
         val htmlFileText = publisher.translate(mdFileText)
         // then
         assertEquals("""
-            
-            
-            <h5> Chapter 4: Choose a Direction</h5>
-            
-            <hr/>
-            
-            It’s important to discuss and vet your ontological decisions with stakeholders and users. Talking about language choices gives you a chance to test them.
-            
-            It may sound obvious, but it’s quite common to think something is clearly defined before talking about it with other people.
-            
-            A good starting point in exploring ontology is to bring everyone together to make a list of terms and concepts. Ask each person to share:
-            
-                One term that they wish they knew more about
-                One term that they wish others understood better
-            
-            Go through each term as a group and use this as a forum for educating each other on what you know about language and context. Don’t “uh huh” your way through words you’ve never heard or don’t understand. Instead, untangle acronyms and unfamiliar phrases.
-            
-            If someone uses a different word than you do, ask for clarification. Why do they use that word? Get them to explain it. Complexity tends to hide in minutiae.
-            
-            <blockquote>
-            <pre>
-            Exercise
-            
-                -> Examine one term at a time ask for clarifications.
-            
-            </pre>
-            </blockquote>
-            
-            <img alt="shared-terms" src="/img/shared-terms4_bw.jpeg" />
-            
-            </body>
-            </html>
-        """.trimIndent(), htmlFileText)
+<!doctype html>
+<html>
+  <head>
+     <meta charset="utf-8">
+     <link rel="stylesheet" href="/css/prettify.css">
+  </head>
+  <body>
+<br><br>
+<br><br>
+<h5> Chapter 4: Choose a Direction</h5>
+<br><br>
+<hr/>
+<br><br>
+It’s important to discuss and vet your ontological decisions with stakeholders and users. Talking about language choices gives you a chance to test them.
+<br><br>
+It may sound obvious, but it’s quite common to think something is clearly defined before talking about it with other people.
+<br><br>
+A good starting point in exploring ontology is to bring everyone together to make a list of terms and concepts. Ask each person to share:
+<br><br>
+    One term that they wish they knew more about
+    One term that they wish others understood better
+<br><br>
+Go through each term as a group and use this as a forum for educating each other on what you know about language and context. Don’t “uh huh” your way through words you’ve never heard or don’t understand. Instead, untangle acronyms and unfamiliar phrases.
+<br><br>
+If someone uses a different word than you do, ask for clarification. Why do they use that word? Get them to explain it. Complexity tends to hide in minutiae.
+<br><br>
+<blockquote>
+<pre>
+Exercise
+<br><br>
+    -> Examine one term at a time ask for clarifications.
+<br><br>
+</pre>
+</blockquote>
+<br><br>
+<img alt="shared-terms" src="/img/shared-terms4_bw.jpeg" />
+<br><br>
+  </body>
+</html>
+       """.trimIndent(), htmlFileText)
     }
 
     @Test

@@ -7,10 +7,17 @@ class MdHtmlPublisher {
     fun translate(mdFileText: String): String {
         val lines = mdFileText.split(System.lineSeparator())
         val htmlLines = mutableListOf<String>()
+        htmlLines.add("<!doctype html>")
         htmlLines.add("<html>")
-        htmlLines.add("<body>")
-        translateBody(lines,htmlLines)
-        htmlLines.add("</body>")
+        htmlLines.add("  <head>")
+        htmlLines.add("     <meta charset=\"utf-8\">")
+        htmlLines.add("     <link rel=\"stylesheet\" href=\"/css/prettify.css\">")
+        htmlLines.add("  </head>")
+        htmlLines.add("  <body>")
+        val bodyLines  = mutableListOf<String>()
+        translateBody(lines,bodyLines)
+        htmlLines.addAll(bodyLines)
+        htmlLines.add("  </body>")
         htmlLines.add("</html>")
         return htmlLines.joinToString(System.lineSeparator())
     }
@@ -57,6 +64,10 @@ class MdHtmlPublisher {
                 startQuote=false
                 skipLine=true
             }
+            if (mdLine.trim()=="") {
+                htmlLines.add("<br><br>")
+                skipLine = true
+            }
             //removes all previous metadata lines if present
             if (mdLine.startsWith("~~~~~~")) {
                 htmlLines.clear()
@@ -76,10 +87,13 @@ class MdHtmlPublisher {
                     val before = mdLine.substringBefore("[")
                     val alt = mdLine.substringAfter("[").substringBefore("]")
                     val src = mdLine.substringAfter("](").substringBefore(")")
+                    val localizedSrc = if (src.endsWith(".md") && !src.startsWith("http"))
+                                src.substringBeforeLast(".md")+".html"
+                    else src
                     val after = mdLine.substringAfter("![").substringAfter(")")
-                    htmlLines.add("$before<a href=\"$src\" />$alt</a>$after")
+                    htmlLines.add("$before<a href=\"$localizedSrc\" />$alt</a>$after")
                     skipLine=true
-                }
+            }
             // normal line
             if (!skipLine) {
                 htmlLines.add(mdLine)
@@ -164,8 +178,9 @@ class MdHtmlPublisher {
             }
             val urlHtmlFile = file.absolutePath.substringAfter(targetDirectory.absolutePath).dropLast(3)+".html"
             val relativeUrlHtmlFile = if (urlHtmlFile.startsWith("/")) urlHtmlFile.drop(1) else urlHtmlFile
+            val fileName = file.name.replace('_',' ')
             println(relativeUrlHtmlFile)
-            tocLines.add("<a href=\"${relativeUrlHtmlFile}\" >${file.name}</a><br>")
+            tocLines.add("<a href=\"${relativeUrlHtmlFile}\" >${fileName}</a><br>")
             translateFile(file, createToc)
         }
         tocLines.add("</body>")
