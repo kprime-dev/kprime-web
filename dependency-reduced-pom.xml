@@ -181,7 +181,7 @@
     <jackson.databind.version>2.15.2</jackson.databind.version>
     <h2.version>2.2.224</h2.version>
     <woodstox.version>5.4.0</woodstox.version>
-    <postgresql.version>42.5.4</postgresql.version>
+    <postgresql.version>42.5.5</postgresql.version>
     <archunit.version>1.0.1</archunit.version>
     <jackson.kotlin.version>2.12.2</jackson.kotlin.version>
     <mysql.version>8.0.32</mysql.version>
