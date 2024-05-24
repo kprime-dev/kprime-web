@@ -10,6 +10,12 @@ usage:
 test:
 	mvn clean test  -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
 
+assembly:
+	mvn clean compile assembly:single
+
+assembly-run:
+	java -jar target/kprime-webapp-1.0-SNAPSHOT-jar-with-dependencies.jar
+
 build:
 	mvn package appassembler:assemble  -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
 
