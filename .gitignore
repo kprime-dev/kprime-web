@@ -6,3 +6,4 @@ release/
 logs/
 settings/
 webtau.report.html
+dependency-reduced-pom.xml
